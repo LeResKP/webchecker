@@ -1,4 +1,4 @@
 def includeme(config):
     config.add_static_view('static', 'static', cache_max_age=3600)
-    config.add_route('blobs', '/blobs/:id')
-    config.add_route('urls', '/urls')
+    config.add_route('blobs', '/api/blobs/:id')
+    config.add_route('urls', '/api/urls')
