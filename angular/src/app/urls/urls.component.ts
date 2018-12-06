@@ -3,25 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
+import { DEVICES, STATUS } from '../constants';
 import { API_URL } from '../urls';
 import { UrlService } from '../url.service';
-
-
-// TODO: get DEVICES from API
-const DEVICES = [
-  {
-    id: 'desktop',
-    name: 'Desktop',
-  },
-  {
-    id: 'ipad',
-    name: 'iPad',
-  },
-  {
-    id: 'iphone6',
-    name: 'iPhone 6',
-  }
-];
 
 
 @Component({
@@ -35,6 +19,7 @@ export class UrlsComponent implements OnDestroy, OnInit {
   public url: any;
   public api_url = API_URL;
   public devices = DEVICES;
+  public STATUS = STATUS;
 
   constructor(private route: ActivatedRoute, private urlService: UrlService) { }
 

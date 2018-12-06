@@ -5,18 +5,11 @@ import zope.sqlalchemy
 
 # import or define all models here to ensure they are attached to the
 # Base.metadata prior to any initialization routines
-from .url import Url, UrlBlob  # noqa
+from .url import Url, UrlBlob, UrlStatus  # noqa
 
 # run configure_mappers after defining all of the models to ensure
 # all relationships can be setup
 configure_mappers()
-
-
-DEVICES = {
-    'desktop': 'Desktop',
-    'ipad': 'iPad',
-    'iphone6': 'iPhone 6',
-}
 
 
 def get_engine(settings, prefix='sqlalchemy.'):

@@ -1,3 +1,11 @@
 img {
   max-width: 100%;
 }
+
+.fa-check {
+  color: green;
+}
+
+.fa-times {
+  color: red;
+}

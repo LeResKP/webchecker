@@ -1,10 +1,16 @@
 <ng-template [ngIf]="url">
   <a [href]="url.url" target="url">{{ url.url }}</a>
-	<ngb-tabset>
-		<ngb-tab [title]="device.name" *ngFor="let device of devices">
-			<ng-template ngbTabContent>
-				<img [src]="api_url + '/blobs/' + url.blobs[device.id]">
-			</ng-template>
-		</ngb-tab>
-	</ngb-tabset>
+  <ngb-tabset>
+    <ngb-tab *ngFor="let device of devices">
+      <ng-template ngbTabTitle>
+        {{ device.name }}
+        <i class="fa fa-check" *ngIf="url.status.devices[device.id] === STATUS.GOOD"></i>
+        <i class="fa fa-times" *ngIf="url.status.devices[device.id] === STATUS.BAD"></i>
+      </ng-template>
+
+      <ng-template ngbTabContent>
+        <img [src]="api_url + '/blobs/' + url.blobs[device.id]">
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
 </ng-template>

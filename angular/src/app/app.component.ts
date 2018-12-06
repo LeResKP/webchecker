@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { STATUS } from './constants';
 import { UrlService } from './url.service';
 
 
@@ -12,6 +13,7 @@ import { UrlService } from './url.service';
 export class AppComponent implements OnInit {
   title = 'webchecker';
   urls = <any>[];
+  STATUS = STATUS;
 
   constructor(private router: Router, private urlService: UrlService) {}
 
