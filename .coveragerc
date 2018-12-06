@@ -1,0 +1,3 @@
+[run]
+source = webchecker
+omit = webchecker/test*
