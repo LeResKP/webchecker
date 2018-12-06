@@ -18,22 +18,20 @@ class Url(Base):
     blobs = relationship("UrlBlob", uselist=True)
 
     def __json__(self, request):
-        return {
+        dic = {
             'url_id': self.url_id,
             'url': self.url,
-            'blobs': [self.blobs]
         }
+        blobs = {}
+        for blob in self.blobs:
+            blobs[blob.device] = blob.url_blob_id
+        dic['blobs'] = blobs
+        return dic
 
 
 class UrlBlob(Base):
     __tablename__ = 'url_blob'
     url_blob_id = Column(Integer, primary_key=True)
     url_id = Column(Integer, ForeignKey("url.url_id"), nullable=False)
-    blob = Column(BLOB, nullable=False)
     device = Column(Text, nullable=False)
-
-    def __json__(self, request):
-        return {
-            'url_blob_id': self.url_blob_id,
-            'device': self.device,
-        }
+    blob = Column(BLOB, nullable=False)

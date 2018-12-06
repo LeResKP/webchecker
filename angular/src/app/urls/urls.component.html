@@ -1,0 +1,10 @@
+<ng-template [ngIf]="url">
+  <a [href]="url.url" target="url">{{ url.url }}</a>
+	<ngb-tabset>
+		<ngb-tab [title]="device.name" *ngFor="let device of devices">
+			<ng-template ngbTabContent>
+				<img [src]="api_url + '/blobs/' + url.blobs[device.id]">
+			</ng-template>
+		</ngb-tab>
+	</ngb-tabset>
+</ng-template>

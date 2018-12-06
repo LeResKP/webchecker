@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+import { Observable, of } from 'rxjs';
+import { filter, map, shareReplay, tap } from 'rxjs/operators';
+
 import { API_URL } from './urls';
 
 
@@ -9,9 +12,30 @@ import { API_URL } from './urls';
 })
 export class UrlService {
 
+  urls =  null;
+  obs = null;
+
   constructor(private http: HttpClient) { }
 
-  getUrls() {
-    return this.http.get(`${API_URL}/urls`);
+  getUrls(): Observable<Array<any>> {
+    if (this.urls !== null) {
+      return of(this.urls);
+    } else if (this.obs === null) {
+      this.obs = this.http.get(`${API_URL}/urls`).pipe(
+        tap(urls => {
+          this.urls = urls;
+          return urls;
+        }),
+        shareReplay(1)
+      );
+    }
+    return this.obs;
+  }
+
+  getUrl(id) {
+    return this.getUrls().pipe(
+      map((urls) => urls.filter(url => url.url_id === id)),
+      map((urls) => urls.length ? urls[0] : null),
+    );
   }
 }
