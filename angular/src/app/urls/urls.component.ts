@@ -33,4 +33,14 @@ export class UrlsComponent implements OnDestroy, OnInit {
     this.sub.unsubscribe();
   }
 
+  statusChange(urlId, device, statusId, value) {
+    let func;
+    if (statusId) {
+      func = this.urlService.updateStatus(urlId, statusId, value);
+    } else {
+      func = this.urlService.createStatus(urlId, device, value);
+    }
+    func.subscribe();
+  }
+
 }

@@ -21,7 +21,7 @@ class Url(Base):
     url_id = Column(Integer, primary_key=True)
     url = Column(Text)
     blobs = relationship("UrlBlob", uselist=True)
-    statuses = relationship("UrlStatus", uselist=True)
+    statuses = relationship("UrlStatus", uselist=True, back_populates="url")
 
     def __json__(self, request):
         dic = {
@@ -35,16 +35,19 @@ class Url(Base):
 
         statuses = {}
         for status in self.statuses:
-            statuses[status.device] = status.status
+            statuses[status.device] = {
+                'status': status.status,
+                'id': status.url_status_id,
+            }
 
         status_dic = {
             'devices': statuses,
             'status': None,
         }
 
-        if any(v == STATUS_BAD for v in statuses.values()):
+        if any(v['status'] == STATUS_BAD for v in statuses.values()):
             status_dic['status'] = STATUS_BAD
-        elif (all(v == STATUS_GOOD for v in statuses.values()) and
+        elif (all(v['status'] == STATUS_GOOD for v in statuses.values()) and
                 len(statuses.values()) == len(DEVICES)):
             status_dic['status'] = STATUS_GOOD
 
@@ -66,3 +69,4 @@ class UrlStatus(Base):
     url_id = Column(Integer, ForeignKey("url.url_id"), nullable=False)
     device = Column(Text, nullable=False)
     status = Column(Text, nullable=False)
+    url = relationship("Url", back_populates="statuses")

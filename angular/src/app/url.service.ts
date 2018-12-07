@@ -38,4 +38,22 @@ export class UrlService {
       map((urls) => urls.length ? urls[0] : null),
     );
   }
+
+  createStatus(urlId, device, status) {
+    return this.http.post(`${API_URL}/urls/${urlId}/status`, {status, device: device.id}).pipe(
+      tap((res) => {
+        // NOTE: it works because this.urls is loaded.
+        this.getUrl(urlId).subscribe(r => r['status'] = res['status']);
+      })
+    );
+  }
+
+  updateStatus(urlId, statusId, status) {
+    return this.http.put(`${API_URL}/status/${statusId}`, {status}).pipe(
+      tap((res) => {
+        // NOTE: it works because this.urls is loaded.
+        this.getUrl(urlId).subscribe(r => r['status'] = res['status']);
+      })
+    );
+  }
 }
