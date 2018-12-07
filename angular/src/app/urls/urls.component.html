@@ -1,5 +1,9 @@
 <ng-template [ngIf]="url">
   <a [href]="url.url" target="url">{{ url.url }}</a>
+
+  <div class="clearfix">
+    <button class="btn btn-sm float-right" (click)="doScreenshot(url)">New screenshots</button>
+  </div>
   <ngb-tabset>
     <ngb-tab *ngFor="let device of devices">
       <ng-template ngbTabTitle>
@@ -9,16 +13,21 @@
       </ng-template>
 
       <ng-template ngbTabContent>
-        <img [src]="api_url + '/blobs/' + url.blobs[device.id]">
-        <br>
-        <br>
-        <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [ngModel]="url.status.devices[device.id]?.status" (ngModelChange)="statusChange(url.url_id, device, url.status.devices[device.id]?.id, $event)">
-          <label ngbButtonLabel class="btn-primary">
-            <input ngbButton type="radio" [value]="STATUS.GOOD"> Good
-          </label>
-          <label ngbButtonLabel class="btn-primary">
-            <input ngbButton type="radio" [value]="STATUS.BAD"> Bad
-          </label>
+        <div *ngIf="doingScreenshot">
+          Regenerating screenshots...
+        </div>
+        <div *ngIf="!doingScreenshot">
+          <img [src]="api_url + '/blobs/' + url.blobs[device.id]">
+          <br>
+          <br>
+          <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [ngModel]="url.status.devices[device.id]?.status" (ngModelChange)="statusChange(url.url_id, device, url.status.devices[device.id]?.id, $event)">
+            <label ngbButtonLabel class="btn-primary">
+              <input ngbButton type="radio" [value]="STATUS.GOOD"> Good
+            </label>
+            <label ngbButtonLabel class="btn-primary">
+              <input ngbButton type="radio" [value]="STATUS.BAD"> Bad
+            </label>
+          </div>
         </div>
       </ng-template>
     </ngb-tab>

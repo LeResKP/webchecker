@@ -20,6 +20,7 @@ export class UrlsComponent implements OnDestroy, OnInit {
   public api_url = API_URL;
   public devices = DEVICES;
   public STATUS = STATUS;
+  public doingScreenshot = false;
 
   constructor(private route: ActivatedRoute, private urlService: UrlService) { }
 
@@ -41,6 +42,11 @@ export class UrlsComponent implements OnDestroy, OnInit {
       func = this.urlService.createStatus(urlId, device, value);
     }
     func.subscribe();
+  }
+
+  doScreenshot(url) {
+    this.doingScreenshot = true;
+    this.urlService.doScreenshot(url.url_id).subscribe(() => this.doingScreenshot = false);
   }
 
 }

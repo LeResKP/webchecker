@@ -56,4 +56,16 @@ export class UrlService {
       })
     );
   }
+
+  doScreenshot(urlId) {
+    return this.http.post(`${API_URL}/screenshots/${urlId}`, {}).pipe(
+      tap((res) => {
+        // NOTE: it works because this.urls is loaded.
+        this.getUrl(urlId).subscribe(r => {
+          r['blobs'] = res['blobs'];
+          r['status'] = res['status'];
+        });
+      })
+    );
+  }
 }
