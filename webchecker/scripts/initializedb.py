@@ -1,6 +1,8 @@
+import base64
 import os
 import sys
 import transaction
+import requests
 
 from pyramid.paster import (
     get_appsettings,
@@ -15,7 +17,10 @@ from ..models import (
     get_session_factory,
     get_tm_session,
     )
-from ..models import Url, UrlBlob, DEVICES
+from ..models import Url, UrlBlob
+
+# Put the urls to put in the DB here
+URLS = []
 
 
 def usage(argv):
@@ -41,3 +46,11 @@ def main(argv=sys.argv):
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
 
+        for u in URLS:
+            url = Url(url=u)
+            r = requests.get('http://localhost:3000/', {'url': u})
+            for b in r.json()['data']:
+                url.blobs.append(
+                    UrlBlob(device=b['device'],
+                            blob=base64.decodestring(b['base64'])))
+            dbsession.add(url)
