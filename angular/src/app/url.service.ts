@@ -68,4 +68,8 @@ export class UrlService {
       })
     );
   }
+
+  getValidation(urlId) {
+    return this.http.get(`${API_URL}/urls/${urlId}/validation`);
+  }
 }

@@ -20,7 +20,8 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.urlService.getUrls().subscribe((urls) => {
       this.urls = urls;
-      this.router.navigate(['/urls', this.urls[0].url_id]);
+      // TODO: redirect when there is no id defined
+      // this.router.navigate(['/urls', this.urls[0].url_id]);
     });
   }
 }

@@ -21,12 +21,16 @@ export class UrlsComponent implements OnDestroy, OnInit {
   public devices = DEVICES;
   public STATUS = STATUS;
   public doingScreenshot = false;
+  public validationMessages = [];
 
   constructor(private route: ActivatedRoute, private urlService: UrlService) { }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.urlService.getUrl(+params['id']).subscribe((url) => this.url = url);
+      this.urlService.getValidation(+params['id']).subscribe((res) => {
+        this.validationMessages = res['messages'];
+      });
     });
   }
 

@@ -5,3 +5,4 @@ def includeme(config):
     config.add_route('update_status', '/api/status/:id')
     config.add_route('create_status', '/api/urls/:id/status')
     config.add_route('screenshot', '/api/screenshots/:id')
+    config.add_route('validation', '/api/urls/:id/validation')

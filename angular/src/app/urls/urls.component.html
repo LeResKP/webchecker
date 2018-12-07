@@ -1,35 +1,48 @@
-<ng-template [ngIf]="url">
-  <a [href]="url.url" target="url">{{ url.url }}</a>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-8">
+      <ng-template [ngIf]="url">
+        <a [href]="url.url" target="url">{{ url.url }}</a>
 
-  <div class="clearfix">
-    <button class="btn btn-sm float-right" (click)="doScreenshot(url)">New screenshots</button>
+        <div class="clearfix">
+          <button class="btn btn-sm float-right" (click)="doScreenshot(url)">New screenshots</button>
+        </div>
+        <ngb-tabset>
+          <ngb-tab *ngFor="let device of devices">
+            <ng-template ngbTabTitle>
+              {{ device.name }}
+              <i class="fa fa-check" *ngIf="url.status.devices[device.id]?.status === STATUS.GOOD"></i>
+              <i class="fa fa-times" *ngIf="url.status.devices[device.id]?.status === STATUS.BAD"></i>
+            </ng-template>
+
+            <ng-template ngbTabContent>
+              <div *ngIf="doingScreenshot">
+                Regenerating screenshots...
+              </div>
+              <div *ngIf="!doingScreenshot">
+                <img [src]="api_url + '/blobs/' + url.blobs[device.id]">
+                <br>
+                <br>
+                <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [ngModel]="url.status.devices[device.id]?.status" (ngModelChange)="statusChange(url.url_id, device, url.status.devices[device.id]?.id, $event)">
+                  <label ngbButtonLabel class="btn-primary">
+                    <input ngbButton type="radio" [value]="STATUS.GOOD"> Good
+                  </label>
+                  <label ngbButtonLabel class="btn-primary">
+                    <input ngbButton type="radio" [value]="STATUS.BAD"> Bad
+                  </label>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+      </ng-template>
+    </div>
+    <div class="col-sm-4">
+      <div class="validation">
+        <ul>
+          <li *ngFor="let error of validationMessages">{{error.type}} (line {{error.lastLine}}): {{error.message}}<br> <code>{{error.extract}}</code></li>
+        </ul>
+      </div>
+    </div>
   </div>
-  <ngb-tabset>
-    <ngb-tab *ngFor="let device of devices">
-      <ng-template ngbTabTitle>
-        {{ device.name }}
-        <i class="fa fa-check" *ngIf="url.status.devices[device.id]?.status === STATUS.GOOD"></i>
-        <i class="fa fa-times" *ngIf="url.status.devices[device.id]?.status === STATUS.BAD"></i>
-      </ng-template>
-
-      <ng-template ngbTabContent>
-        <div *ngIf="doingScreenshot">
-          Regenerating screenshots...
-        </div>
-        <div *ngIf="!doingScreenshot">
-          <img [src]="api_url + '/blobs/' + url.blobs[device.id]">
-          <br>
-          <br>
-          <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [ngModel]="url.status.devices[device.id]?.status" (ngModelChange)="statusChange(url.url_id, device, url.status.devices[device.id]?.id, $event)">
-            <label ngbButtonLabel class="btn-primary">
-              <input ngbButton type="radio" [value]="STATUS.GOOD"> Good
-            </label>
-            <label ngbButtonLabel class="btn-primary">
-              <input ngbButton type="radio" [value]="STATUS.BAD"> Bad
-            </label>
-          </div>
-        </div>
-      </ng-template>
-    </ngb-tab>
-  </ngb-tabset>
-</ng-template>
+</div>
