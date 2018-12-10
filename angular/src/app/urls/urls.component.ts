@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { NgbTabset } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 
 import { DEVICES, STATUS } from '../constants';
@@ -23,11 +24,19 @@ export class UrlsComponent implements OnDestroy, OnInit {
   public doingScreenshot = false;
   public validationMessages = [];
 
+  @ViewChild('tabset') tabset: NgbTabset;
+
   constructor(private route: ActivatedRoute, private urlService: UrlService) { }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      this.urlService.getUrl(+params['id']).subscribe((url) => this.url = url);
+      this.urlService.getUrl(+params['id']).subscribe((url) => {
+        this.url = url
+        if (this.tabset) {
+          this.tabset.select(this.tabset.tabs.first.id);
+        }
+        Array.from(document.querySelectorAll('.screenshots')).forEach((elt) => elt.scrollTop = 0);
+      });
       this.urlService.getValidation(+params['id']).subscribe((res) => {
         this.validationMessages = res['messages'];
       });

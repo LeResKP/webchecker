@@ -2,10 +2,44 @@ img {
   max-width: 100%;
 }
 
+.webchecker-app {
+  padding-top: 20px;
+}
+
 .fa-check {
   color: green;
 }
 
 .fa-times {
   color: red;
+}
+
+.list-group-url {
+  overflow: auto;
+  height: calc(100vh - 20px);
+}
+
+.validation {
+  overflow: auto;
+  height: calc(100vh - 20px - 24px - 2px);
+}
+
+.screenshots {
+  overflow: auto;
+  height: calc(100vh - 20px - 97px);
+}
+
+.list-group-url a {
+  word-break: break-word;
+}
+
+img.screenshot {
+  margin-top: 2rem;
+  border: 1px dotted #ccc;
+  padding: 10px;
+}
+
+.validation {
+  border: 1px dotted #ccc;
+  padding: 10px;
 }
