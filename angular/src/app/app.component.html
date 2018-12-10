@@ -1,8 +1,21 @@
 <div class="container-fluid webchecker-app">
   <div class="row">
     <div class="col-md-3">
-    <input type="text" class="form-control" #input />
-    <br>
+      <input type="text" class="form-control" #input />
+      <div class="text-center">
+        <div class="btn-group btn-group-sm btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="filterModel" (ngModelChange)="onChange($event)">
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" [value]="null"> All
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" [value]="STATUS.GOOD"> Good
+          </label>
+          <label ngbButtonLabel class="btn-primary">
+            <input ngbButton type="radio" [value]="STATUS.BAD"> Bad
+          </label>
+        </div>
+      </div>
+      <br>
 
       <div class="list-group list-group-url">
         <a href="#" class="list-group-item list-group-item-action" [routerLink]="['/urls', url.url_id]" routerLinkActive="active" *ngFor="let url of urls">

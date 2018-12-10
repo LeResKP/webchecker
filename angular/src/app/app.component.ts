@@ -20,6 +20,7 @@ export class AppComponent implements OnDestroy, OnInit {
   _urls = <any>[];
   STATUS = STATUS;
 
+  filterModel = null;
   keyupSub:  Subscription;
   @ViewChild('input') inputElRef: ElementRef;
 
@@ -27,15 +28,27 @@ export class AppComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.urlService.getUrls().subscribe((urls) => {
-      this.urls = urls;
       this._urls = urls;
+      this.setUrls();
     });
     this.keyupSub = fromEvent(this.inputElRef.nativeElement, 'keyup').pipe(
       debounceTime(100),
       distinctUntilChanged(),
     ).subscribe((event: KeyboardEvent) => {
       this.urls = this._urls.filter(v => v.url.indexOf((<HTMLInputElement>event.target).value) > -1);
+      this.setUrls();
     });
+  }
+
+
+  setUrls() {
+    this.urls = this._urls
+      .filter(v => this.filterModel ? v.status.status === this.filterModel : true)
+      .filter(v => this.inputElRef.nativeElement.value ? v.url.indexOf(this.inputElRef.nativeElement.value) > -1 : true);
+  }
+
+  onChange() {
+    this.setUrls();
   }
 
   ngOnDestroy() {
