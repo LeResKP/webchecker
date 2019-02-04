@@ -48,7 +48,7 @@ export class UrlService {
       tap((res) => {
         // NOTE: it works because this.urls is loaded.
         this.getUrl(urlId).subscribe(r => {
-          r['blobs'] = res['blobs'];
+          r['screenshots'] = res['screenshots'];
           r['status'] = res['status'];
         });
       })

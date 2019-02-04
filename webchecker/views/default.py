@@ -6,16 +6,16 @@ import base64
 import requests
 import transaction
 
-from ..models import Url, UrlBlob, UrlStatus
+from ..models import Url, Screenshot, UrlStatus
 
 
-@view_config(route_name='blobs', request_method='GET')
-def get_blob(request):
-    blob = request.dbsession.query(UrlBlob).filter_by(
-        url_blob_id=request.matchdict['id']).one_or_none()
-    if not blob:
+@view_config(route_name='screenshots', request_method='GET')
+def get_screenshots(request):
+    screenshot = request.dbsession.query(Screenshot).filter_by(
+        screenshot_id=request.matchdict['id']).one_or_none()
+    if not screenshot:
         raise exc.HTTPNotFound()
-    return Response(blob.blob, content_type='image/png', status=200)
+    return Response(screenshot.screenshot, content_type='image/png', status=200)
 
 
 @view_config(route_name='update_status', request_method='PUT', renderer='json')
@@ -58,14 +58,14 @@ def do_screenshot(request):
 
         url.statuses = []
 
-        for blob in url.blobs:
-            request.dbsession.delete(blob)
-        url.blobs = []
+        for screenshot in url.screenshots:
+            request.dbsession.delete(screenshot)
+        url.screenshots = []
 
         for b in r.json()['data']:
-            url.blobs.append(
-                UrlBlob(device=b['device'],
-                        blob=base64.decodestring(b['base64'])))
+            url.screenshots.append(
+                Screenshot(device=b['device'],
+                           Screenshot=base64.decodestring(b['base64'])))
         tx.commit()
 
     return request.dbsession.query(Url).filter_by(

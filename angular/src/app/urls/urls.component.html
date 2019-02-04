@@ -22,7 +22,12 @@
                 Regenerating screenshots...
               </div>
               <div *ngIf="!doingScreenshot" class="screenshots">
-                <img [src]="api_url + '/blobs/' + url.blobs[device.id]" class="screenshot">
+                <ng-template [ngIf]="url.screenshots[device.id]" [ngIfElse]="noScreenshot">
+                  <img [src]="api_url + '/screenshots/' + url.screenshots[device.id]" class="screenshot">
+                </ng-template>
+                <ng-template #noScreenshot>
+                  No screenshot available
+                </ng-template>
                 <br>
                 <br>
                 <div class="text-center mb-5">

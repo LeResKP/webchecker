@@ -17,7 +17,7 @@ from ..models import (
     get_session_factory,
     get_tm_session,
     )
-from ..models import Url, UrlBlob
+from ..models import Url, Screenshot
 
 # Put the urls to put in the DB here
 URLS = []

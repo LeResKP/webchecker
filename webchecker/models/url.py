@@ -24,7 +24,7 @@ class Url(Base):
         Integer, ForeignKey("project_version.project_version_id"),
         nullable=False)
 
-    blobs = relationship("UrlBlob", uselist=True)
+    screenshots = relationship("Screenshot", uselist=True)
     statuses = relationship("UrlStatus", uselist=True, back_populates="url")
 
     def __json__(self, request):
@@ -32,10 +32,10 @@ class Url(Base):
             'url_id': self.url_id,
             'url': self.url,
         }
-        blobs = {}
-        for blob in self.blobs:
-            blobs[blob.device] = blob.url_blob_id
-        dic['blobs'] = blobs
+        screenshots = {}
+        for screenshot in self.screenshots:
+            screenshots[screenshot.device] = screenshot.screenshot_id
+        dic['screenshots'] = screenshots
 
         statuses = {}
         for status in self.statuses:
@@ -59,12 +59,12 @@ class Url(Base):
         return dic
 
 
-class UrlBlob(Base):
-    __tablename__ = 'url_blob'
-    url_blob_id = Column(Integer, primary_key=True)
+class Screenshot(Base):
+    __tablename__ = 'screenshot'
+    screenshot_id = Column(Integer, primary_key=True)
     url_id = Column(Integer, ForeignKey("url.url_id"), nullable=False)
     device = Column(Text, nullable=False)
-    blob = Column(LargeBinary, nullable=False)
+    screenshot = Column(LargeBinary, nullable=False)
 
 
 class UrlStatus(Base):
