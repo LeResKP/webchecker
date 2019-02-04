@@ -9,11 +9,6 @@ import transaction
 from ..models import Url, UrlBlob, UrlStatus
 
 
-@view_config(route_name='urls', request_method='GET', renderer='json')
-def get_urls(request):
-    return request.dbsession.query(Url).all()
-
-
 @view_config(route_name='blobs', request_method='GET')
 def get_blob(request):
     blob = request.dbsession.query(UrlBlob).filter_by(

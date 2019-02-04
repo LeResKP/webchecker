@@ -2,7 +2,7 @@ from sqlalchemy import (
     Column,
     Integer,
     Text,
-    BLOB,
+    LargeBinary,
     ForeignKey,
 )
 from sqlalchemy.orm import relationship
@@ -20,6 +20,10 @@ class Url(Base):
     __tablename__ = 'url'
     url_id = Column(Integer, primary_key=True)
     url = Column(Text)
+    project_version_id = Column(
+        Integer, ForeignKey("project_version.project_version_id"),
+        nullable=False)
+
     blobs = relationship("UrlBlob", uselist=True)
     statuses = relationship("UrlStatus", uselist=True, back_populates="url")
 
@@ -60,7 +64,7 @@ class UrlBlob(Base):
     url_blob_id = Column(Integer, primary_key=True)
     url_id = Column(Integer, ForeignKey("url.url_id"), nullable=False)
     device = Column(Text, nullable=False)
-    blob = Column(BLOB, nullable=False)
+    blob = Column(LargeBinary, nullable=False)
 
 
 class UrlStatus(Base):

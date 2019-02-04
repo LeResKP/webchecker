@@ -17,7 +17,9 @@ from ..models import (
     get_session_factory,
     get_tm_session,
     )
-from ..models import Url, UrlBlob
+from ..models import (
+    Project, ProjectVersion, Url
+)
 
 # Put the urls to put in the DB here
 URLS = []
@@ -30,6 +32,14 @@ def usage(argv):
     sys.exit(1)
 
 
+URLS = [
+    'http://localhost:8000/',
+    'http://localhost:8000/ok',
+    'http://localhost:8000/warning',
+    'http://localhost:8000/redirect302',
+]
+
+
 def main(argv=sys.argv):
     if len(argv) < 2:
         usage(argv)
@@ -39,4 +49,20 @@ def main(argv=sys.argv):
     settings = get_appsettings(config_uri, options=options)
 
     engine = get_engine(settings)
-    Base.metadata.create_all(engine)
+    session_factory = get_session_factory(engine)
+
+    with transaction.manager:
+        dbsession = get_tm_session(session_factory, transaction.manager)
+
+        project1 = Project(name='localhost2')
+        version = ProjectVersion()
+        version.project = project1
+
+        for url in URLS[2:]:
+            version.urls.append(Url(url=url))
+
+        dbsession.add(version)
+
+
+if __name__ == '__main__':
+    main()

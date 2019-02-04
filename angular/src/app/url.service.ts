@@ -17,26 +17,12 @@ export class UrlService {
 
   constructor(private http: HttpClient) { }
 
-  getUrls(): Observable<Array<any>> {
-    if (this.urls !== null) {
-      return of(this.urls);
-    } else if (this.obs === null) {
-      this.obs = this.http.get(`${API_URL}/urls`).pipe(
-        tap(urls => {
-          this.urls = urls;
-          return urls;
-        }),
-        shareReplay(1)
-      );
-    }
-    return this.obs;
+  getUrls(versionId): Observable<Array<any>> {
+    return this.http.get<Array<any>>(`${API_URL}/v/${versionId}/urls`);
   }
 
-  getUrl(id) {
-    return this.getUrls().pipe(
-      map((urls) => urls.filter(url => url.url_id === id)),
-      map((urls) => urls.length ? urls[0] : null),
-    );
+  getUrl(urlId) {
+    return this.http.get<Array<any>>(`${API_URL}/urls/${urlId}`);
   }
 
   createStatus(urlId, device, status) {

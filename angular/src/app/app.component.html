@@ -1,32 +1,25 @@
 <div class="container-fluid webchecker-app">
-  <div class="row">
-    <div class="col-md-3">
-      <input type="text" class="form-control" #input />
-      <div class="text-center">
-        <div class="btn-group btn-group-sm btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="filterModel" (ngModelChange)="onChange($event)">
-          <label ngbButtonLabel class="btn-primary">
-            <input ngbButton type="radio" [value]="null"> All
-          </label>
-          <label ngbButtonLabel class="btn-primary">
-            <input ngbButton type="radio" [value]="STATUS.GOOD"> Good
-          </label>
-          <label ngbButtonLabel class="btn-primary">
-            <input ngbButton type="radio" [value]="STATUS.BAD"> Bad
-          </label>
-        </div>
-      </div>
-      <br>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">WebChecker</a>
 
-      <div class="list-group list-group-url">
-        <a href="#" class="list-group-item list-group-item-action" [routerLink]="['/urls', url.url_id]" routerLinkActive="active" *ngFor="let url of urls">
-          {{ url.url }}
-          <i class="fa fa-check" *ngIf="url.status.status === STATUS.GOOD"></i>
-          <i class="fa fa-times" *ngIf="url.status.status === STATUS.BAD"></i>
-        </a>
-      </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item" ngbDropdown>
+          <a class="nav-link" role="button" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+            <ng-template [ngIf]="projectService.currentProject">{{ projectService.currentProject.name }}</ng-template>
+          </a>
+          <div ngbDropdownMenu>
+            <ng-template ngFor let-project [ngForOf]="projects">
+              <a class="dropdown-item" href="#" [routerLink]="['/p', project.id, 'v', project.current_version.id]" *ngIf="project !== projectService.currentProject">{{ project.name }}</a>
+            </ng-template>
+          </div>
+        </li>
+      </ul>
     </div>
-    <div class="col-md-9">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
+  </nav>
+  <router-outlet></router-outlet>
 </div>
