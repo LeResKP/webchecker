@@ -1,11 +1,11 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-sm-9">
-      <div class="container" *ngIf="url">
-        <div class="text-center">
-          <a [href]="url.url" target="url">{{ url.url }}</a>
-        </div>
+<ng-template [ngIf]="url">
+  <div class="text-center">
+    <a [href]="url.url" target="url">{{ url.url }}</a>
+  </div>
+  <ngb-tabset>
+    <ngb-tab title="Screenshots">
 
+      <ng-template ngbTabContent>
         <div class="clearfix">
           <button class="btn btn-sm float-right" (click)="doScreenshot(url)">New screenshots</button>
         </div>
@@ -44,15 +44,18 @@
             </ng-template>
           </ngb-tab>
         </ngb-tabset>
-      </div>
-    </div>
-    <div class="col-sm-3">
-      <h5 class="text-center">w3c validation</h5>
-      <div class="validation">
-        <ul>
-          <li *ngFor="let error of validationMessages">{{error.type}} (line {{error.lastLine}}): {{error.message}}<br> <code>{{error.extract}}</code></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
+      </ng-template>
+    </ngb-tab>
+
+    <ngb-tab title="Validation">
+      <ng-template ngbTabContent>
+        <h5 class="text-center">w3c validation</h5>
+        <div class="validation">
+          <ul>
+            <li *ngFor="let error of validationMessages">{{error.type}} (line {{error.lastLine}}): {{error.message}}<br> <code>{{error.extract}}</code></li>
+          </ul>
+        </div>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</ng-template>
