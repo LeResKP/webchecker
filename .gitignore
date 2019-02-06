@@ -103,3 +103,4 @@ venv.bak/
 # mypy
 .mypy_cache/
 webchecker.sqlite
+node_modules

@@ -1,3 +1,5 @@
+import base64
+
 from sqlalchemy import (
     Column,
     Integer,
@@ -57,6 +59,18 @@ class Url(Base):
 
         dic['status'] = status_dic
         return dic
+
+    def set_screenshots(self, screenshots):
+        for screenshot in screenshots:
+            try:
+                existing = next(s for s in self.screenshots
+                                if s.device == screenshot['device'])
+                existing.screenshot = base64.b64decode(screenshot['base64'])
+            except StopIteration:
+                new_s = Screenshot(
+                    device=screenshot['device'],
+                    screenshot=base64.b64decode(screenshot['base64']))
+                self.screenshots.append(new_s)
 
 
 class Screenshot(Base):
