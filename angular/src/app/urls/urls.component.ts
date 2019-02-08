@@ -23,6 +23,8 @@ export class UrlsComponent implements OnDestroy, OnInit {
   public STATUS = STATUS;
   public doingScreenshot = false;
   public validationMessages = [];
+  public diff: any;
+  public showLayer = true;
 
   @ViewChild('tabset') tabset: NgbTabset;
 
@@ -39,6 +41,9 @@ export class UrlsComponent implements OnDestroy, OnInit {
       });
       this.urlService.getValidation(+params['id']).subscribe((res) => {
         this.validationMessages = res['messages'];
+      });
+      this.urlService.getDiff(+params['id']).subscribe((res) => {
+        this.diff = res;
       });
     });
   }

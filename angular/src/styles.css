@@ -43,3 +43,8 @@ img.screenshot {
   border: 1px dotted #ccc;
   padding: 10px;
 }
+
+.diff-screenshot,
+.diff-layer {
+  position: absolute;
+}

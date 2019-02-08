@@ -72,6 +72,11 @@ class Url(Base):
                     screenshot=base64.b64decode(screenshot['base64']))
                 self.screenshots.append(new_s)
 
+    def get_desktop_screenshot(self):
+        for s in self.screenshots:
+            if s.device == 'desktop':
+                return s
+
 
 class Screenshot(Base):
     __tablename__ = 'screenshot'
@@ -79,6 +84,19 @@ class Screenshot(Base):
     url_id = Column(Integer, ForeignKey("url.url_id"), nullable=False)
     device = Column(Text, nullable=False)
     screenshot = Column(LargeBinary, nullable=False)
+
+
+class ScreenshotDiff(Base):
+    __tablename__ = 'screenshot_diff'
+    screenshot_diff_id = Column(Integer, primary_key=True)
+
+    a_url_id = Column(Integer, ForeignKey("url.url_id"), nullable=False)
+    b_url_id = Column(Integer, ForeignKey("url.url_id"), nullable=False)
+
+    diff = Column(LargeBinary, nullable=True)
+
+    a_url = relationship("Url", foreign_keys=[a_url_id])
+    b_url = relationship("Url", foreign_keys=[b_url_id])
 
 
 class UrlStatus(Base):

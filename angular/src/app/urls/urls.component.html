@@ -57,5 +57,22 @@
         </div>
       </ng-template>
     </ngb-tab>
+
+    <ngb-tab title="Diff" *ngIf="diff && diff.a_url_id">
+      <ng-template ngbTabContent>
+        <a (click)="showLayer = !showLayer">Show layer</a>
+        <div class="row diff-part">
+          <div class="col-6">
+            <img [src]="api_url + '/screenshots/' + diff.a_url_id" class="diff-screenshot">
+            <img [src]="api_url + '/diff/' + diff.screenshot_diff_id" class="diff-layer" *ngIf="showLayer">
+          </div>
+          <div class="col-6">
+            <img [src]="api_url + '/screenshots/' + diff.b_url_id" class="diff-screenshot">
+            <img [src]="api_url + '/diff/' + diff.screenshot_diff_id" class="diff-layer" *ngIf="showLayer">
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+
   </ngb-tabset>
 </ng-template>
