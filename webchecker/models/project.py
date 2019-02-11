@@ -16,7 +16,8 @@ class Project(Base):
     project_id = Column(Integer, primary_key=True)
     name = Column(Text)
     versions = relationship("ProjectVersion", uselist=True,
-                            back_populates="project")
+                            back_populates="project",
+                            order_by='ProjectVersion.version')
 
     def __json__(self, request):
         return {

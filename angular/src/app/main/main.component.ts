@@ -39,7 +39,10 @@ export class MainComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.routeSub = this.route.paramMap.subscribe((params: Params) => {
-      this.projectService.setCurrentProject(+params.params.projectId);
+      this.projectService.setCurrentProject(
+        +params.params.projectId,
+        +params.params.versionId,
+      );
 
       this.urlService.getUrls(+params.params.versionId).subscribe((urls) => {
         this._urls = urls;
