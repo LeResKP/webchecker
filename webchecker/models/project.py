@@ -27,6 +27,12 @@ class Project(Base):
             'current_version': self.versions[-1],
         }
 
+    def get_next_version(self):
+        if not self.versions:
+            return 0
+        last_version = self.versions[-1]
+        return last_version.version + 1
+
 
 class ProjectVersion(Base):
     __tablename__ = 'project_version'

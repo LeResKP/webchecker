@@ -56,9 +56,10 @@ def main(argv=sys.argv):
 
         project1 = Project(name='localhost2')
         version = ProjectVersion()
+        version.version = project1.get_next_version()
         version.project = project1
 
-        for url in URLS[2:]:
+        for url in URLS:
             version.urls.append(Url(url=url))
 
         dbsession.add(version)
