@@ -17,20 +17,25 @@ class Project(Base):
     name = Column(Text)
     versions = relationship("ProjectVersion", uselist=True,
                             back_populates="project",
-                            order_by='ProjectVersion.version')
+                            order_by='desc(ProjectVersion.version)')
 
     def __json__(self, request):
         return {
             'id': self.project_id,
             'name': self.name,
             'versions': self.versions,
-            'current_version': self.versions[-1],
+            'current_version': self.get_current_version(),
         }
 
-    def get_next_version(self):
+    def get_current_version(self):
         if not self.versions:
-            return 0
-        last_version = self.versions[-1]
+            return None
+        return self.versions[0]
+
+    def get_next_version(self):
+        last_version = self.get_current_version()
+        if not last_version:
+            return None
         return last_version.version + 1
 
 
