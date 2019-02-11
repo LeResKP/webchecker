@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { Subscription, fromEvent } from 'rxjs';
@@ -19,7 +19,7 @@ import { UrlService } from '../url.service';
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnDestroy, OnInit {
 
   urls = <any>[];
   _urls = <any>[];
