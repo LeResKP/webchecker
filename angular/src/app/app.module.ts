@@ -10,6 +10,9 @@ import { AppComponent } from './app.component';
 import { ProjectGuard } from './project.guard';
 import { UrlsComponent } from './urls/urls.component';
 import { MainComponent } from './main/main.component';
+import { DiffComponent } from './diff/diff.component';
+import { ScreenshotComponent } from './screenshot/screenshot.component';
+import { ValidationComponent } from './validation/validation.component';
 
 
 const routes: Routes = [
@@ -21,10 +24,52 @@ const routes: Routes = [
   },
   {
     path: 'p/:projectId/v/:versionId',
-    component: MainComponent,
-    children: [{
-      path: 'urls/:id',
-      component: UrlsComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'v',
+        pathMatch: 'full',
+      },
+      {
+      path: 'v',
+      component: MainComponent,
+      data: {'defaultAction': 'validation'},
+      children: [
+        {
+          path: 'urls/:id',
+          component: UrlsComponent,
+          children: [
+            {
+              path: 'validation',
+              component: ValidationComponent,
+            },
+            {
+              path: 'screenshots',
+              component: ScreenshotComponent,
+            },
+          ],
+        },
+        {
+          path: 'diff',
+          component: DiffComponent,
+        },
+      ],
+    },
+    {
+      path: 'd',
+      component: MainComponent,
+      data: {'defaultAction': 'diff'},
+      children: [
+        {
+          path: 'urls/:id',
+          children: [
+            {
+              path: 'diff',
+              component: DiffComponent,
+            },
+          ],
+        },
+      ],
     }]
   },
 ];
@@ -33,7 +78,10 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     UrlsComponent,
-    MainComponent
+    MainComponent,
+    DiffComponent,
+    ScreenshotComponent,
+    ValidationComponent
   ],
   imports: [
     BrowserModule,

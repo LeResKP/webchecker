@@ -1,3 +1,6 @@
-<p>
-  validation works!
-</p>
+<h5 class="text-center">w3c validation</h5>
+<div class="validation">
+  <ul>
+    <li *ngFor="let error of validationMessages">{{error.type}} (line {{error.lastLine}}): {{error.message}}<br> <code>{{error.extract}}</code></li>
+  </ul>
+</div>

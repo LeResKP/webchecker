@@ -9,18 +9,18 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item" ngbDropdown>
-          <a class="nav-link" role="button" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+          <a class="nav-link active" role="button" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
             <ng-template [ngIf]="projectService.currentProject">{{ projectService.currentProject.name }}</ng-template>
           </a>
           <div ngbDropdownMenu>
             <ng-template ngFor let-project [ngForOf]="projects">
-              <a class="dropdown-item" href="#" [routerLink]="['/p', project.id, 'v', project.current_version.id]" *ngIf="project !== projectService.currentProject">{{ project.name }}</a>
+              <a class="dropdown-item" href="#" [routerLink]="['/p', project.id, 'v', project.current_version.id]" [class.active]="project === projectService.currentProject">{{ project.name }}</a>
             </ng-template>
           </div>
         </li>
 
         <li class="nav-item" ngbDropdown *ngIf="projectService.currentProject">
-          <a class="nav-link" role="button" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+          <a class="nav-link active" role="button" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
             <ng-template [ngIf]="projectService.currentProject">Version: {{ projectService.currentVersion.version }}</ng-template>
           </a>
           <div ngbDropdownMenu>
@@ -28,6 +28,12 @@
               <a class="dropdown-item" href="#" [routerLink]="['/p', projectService.currentProject.id, 'v', version.id]" [class.active]="version.id === projectService.currentVersion.id">{{ version.version }}</a>
             </ng-template>
           </div>
+        </li>
+        <li class="nav-item" *ngIf="projectService.currentProject" routerLinkActive="active">
+          <a class="nav-link" [routerLink]="['/p', projectService.currentProject.id, 'v', projectService.currentVersion.id, 'v']" >Validation</a>
+        </li>
+        <li class="nav-item" *ngIf="projectService.currentProject"routerLinkActive="active">
+          <a class="nav-link" [routerLink]="['/p', projectService.currentProject.id, 'v', projectService.currentVersion.id, 'd']">Diff</a>
         </li>
       </ul>
     </div>
