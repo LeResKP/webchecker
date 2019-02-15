@@ -17,13 +17,11 @@ export class ProjectGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-      console.log('check guard');
-
     this.projectService.projects$.pipe(first()).subscribe(res => {
       const projectId = res[0].id;
       const versionId = res[0].current_version.id;
       // TODO: display an error if no project defined or no version
-      this.router.navigate([`/p/${projectId}/v/${versionId}`]);
+      this.router.navigate([`/p/${projectId}/v/${versionId}/v`]);
     });
     return false;
   }

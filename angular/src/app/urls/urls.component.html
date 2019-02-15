@@ -1,78 +1,10 @@
-<ng-template [ngIf]="url">
-  <div class="text-center">
-    <a [href]="url.url" target="url">{{ url.url }}</a>
-  </div>
-  <ngb-tabset>
-    <ngb-tab title="Screenshots">
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link" [routerLink]="['validation']" routerLinkActive="active" role="tab">Validation</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" [routerLink]="['screenshots']" routerLinkActive="active" role="tab">Screenshot</a>
+  </li>
+</ul>
 
-      <ng-template ngbTabContent>
-        <div class="clearfix">
-          <button class="btn btn-sm float-right" (click)="doScreenshot(url)">New screenshots</button>
-        </div>
-        <ngb-tabset #tabset="ngbTabset">
-          <ngb-tab *ngFor="let device of devices">
-            <ng-template ngbTabTitle>
-              {{ device.name }}
-              <i class="fa fa-check" *ngIf="url.status.devices[device.id]?.status === STATUS.GOOD"></i>
-              <i class="fa fa-times" *ngIf="url.status.devices[device.id]?.status === STATUS.BAD"></i>
-            </ng-template>
-
-            <ng-template ngbTabContent>
-              <div *ngIf="doingScreenshot">
-                Regenerating screenshots...
-              </div>
-              <div *ngIf="!doingScreenshot" class="screenshots">
-                <ng-template [ngIf]="url.screenshots[device.id]" [ngIfElse]="noScreenshot">
-                  <img [src]="api_url + '/screenshots/' + url.screenshots[device.id]" class="screenshot">
-                </ng-template>
-                <ng-template #noScreenshot>
-                  No screenshot available
-                </ng-template>
-                <br>
-                <br>
-                <div class="text-center mb-5">
-                <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [ngModel]="url.status.devices[device.id]?.status" (ngModelChange)="statusChange(url.url_id, device, url.status.devices[device.id]?.id, $event)">
-                  <label ngbButtonLabel class="btn-primary">
-                    <input ngbButton type="radio" [value]="STATUS.GOOD"> Good
-                  </label>
-                  <label ngbButtonLabel class="btn-primary">
-                    <input ngbButton type="radio" [value]="STATUS.BAD"> Bad
-                  </label>
-                </div>
-                </div>
-              </div>
-            </ng-template>
-          </ngb-tab>
-        </ngb-tabset>
-      </ng-template>
-    </ngb-tab>
-
-    <ngb-tab title="Validation">
-      <ng-template ngbTabContent>
-        <h5 class="text-center">w3c validation</h5>
-        <div class="validation">
-          <ul>
-            <li *ngFor="let error of validationMessages">{{error.type}} (line {{error.lastLine}}): {{error.message}}<br> <code>{{error.extract}}</code></li>
-          </ul>
-        </div>
-      </ng-template>
-    </ngb-tab>
-
-    <ngb-tab title="Diff" *ngIf="diff && diff.a_url_id">
-      <ng-template ngbTabContent>
-        <a (click)="showLayer = !showLayer">Show layer</a>
-        <div class="row diff-part">
-          <div class="col-6">
-            <img [src]="api_url + '/screenshots/' + diff.a_url_id" class="diff-screenshot">
-            <img [src]="api_url + '/diff/' + diff.screenshot_diff_id" class="diff-layer" *ngIf="showLayer">
-          </div>
-          <div class="col-6">
-            <img [src]="api_url + '/screenshots/' + diff.b_url_id" class="diff-screenshot">
-            <img [src]="api_url + '/diff/' + diff.screenshot_diff_id" class="diff-layer" *ngIf="showLayer">
-          </div>
-        </div>
-      </ng-template>
-    </ngb-tab>
-
-  </ngb-tabset>
-</ng-template>
+<router-outlet></router-outlet>

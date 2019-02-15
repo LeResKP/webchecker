@@ -1,10 +1,10 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
 
 import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 
-import { filter, map } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { of, pipe, from } from 'rxjs';
 
 
@@ -32,12 +32,30 @@ export class MainComponent implements OnDestroy, OnInit {
   keyupSub:  Subscription;
   @ViewChild('input') inputElRef: ElementRef;
 
+  public currentAction: string;
+
   constructor(private route: ActivatedRoute,
               private router: Router,
               private projectService: ProjectService,
               private urlService: UrlService) {}
 
+
+  setCurrentAction() {
+    this.currentAction = this.route.snapshot.data.defaultAction;
+    if (this.route.snapshot.firstChild && this.route.snapshot.firstChild.firstChild) {
+      this.currentAction = this.route.snapshot.firstChild.firstChild.routeConfig.path;
+    }
+  }
+
   ngOnInit() {
+
+    this.setCurrentAction();
+
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+    ).subscribe(() => this.setCurrentAction());
+
+
     this.routeSub = this.route.paramMap.subscribe((params: Params) => {
       this.projectService.setCurrentProject(
         +params.params.projectId,
