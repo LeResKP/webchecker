@@ -13,6 +13,7 @@ import { MainComponent } from './main/main.component';
 import { DiffComponent } from './diff/diff.component';
 import { ScreenshotComponent } from './screenshot/screenshot.component';
 import { ValidationComponent } from './validation/validation.component';
+import { DiffHomeComponent } from './diff/diff-home/diff-home.component';
 
 
 const routes: Routes = [
@@ -49,28 +50,31 @@ const routes: Routes = [
             },
           ],
         },
-        {
-          path: 'diff',
-          component: DiffComponent,
-        },
       ],
     },
     {
       path: 'd',
-      component: MainComponent,
-      data: {'defaultAction': 'diff'},
+      component: DiffHomeComponent,
       children: [
         {
-          path: 'urls/:id',
+          path: ':b_id',
+          component: MainComponent,
+          data: {'defaultAction': 'diff'},
           children: [
             {
-              path: 'diff',
-              component: DiffComponent,
+              path: 'urls/:id',
+              children: [
+                {
+                  path: 'diff',
+                  component: DiffComponent,
+                },
+              ],
             },
           ],
-        },
-      ],
-    }]
+        }
+      ]
+    }
+    ]
   },
 ];
 
@@ -81,7 +85,8 @@ const routes: Routes = [
     MainComponent,
     DiffComponent,
     ScreenshotComponent,
-    ValidationComponent
+    ValidationComponent,
+    DiffHomeComponent
   ],
   imports: [
     BrowserModule,

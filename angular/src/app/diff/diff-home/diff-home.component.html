@@ -1,0 +1,17 @@
+<p>
+  diff-home works!
+</p>
+
+
+Diff against version:
+
+<div ngbDropdown *ngIf="projectService.currentVersion">
+  <button ngbDropdownToggle>Test</button>
+  <div class="dropdown-menu" ngbDropdownMenu>
+    <ng-template ngFor let-version [ngForOf]="projectService.currentProject.versions">
+      <a class="dropdown-item" href="#" [routerLink]="[version.id]" *ngIf="version.id !== projectService.currentVersion.id">{{ version.version }}</a>
+    </ng-template>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

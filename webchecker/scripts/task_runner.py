@@ -2,6 +2,8 @@ import asyncio
 import os
 import sys
 
+from collections import OrderedDict
+
 from pyramid.paster import (
     get_appsettings,
     setup_logging,
@@ -36,20 +38,35 @@ def get_screenshot_diff_tasks(session_factory):
     a_version = 1
     b_version = 2
 
-    # TODO: support having difference in a_urls and b_urls
     lis = []
-    urls = dbsession.query(Url).filter_by(project_version_id=a_version).all()
+    a_urls = dbsession.query(Url).filter_by(project_version_id=a_version).all()
+    b_urls = dbsession.query(Url).filter_by(project_version_id=b_version).all()
 
-    # TODO: optimize query to get tasks to do.
-    for a_url in urls:
-        b_url = dbsession.query(Url).filter_by(
-            url=a_url.url, project_version_id=b_version).one()
-        if dbsession.query(ScreenshotDiff).filter_by(
-                a_url_id=a_url.url_id, b_url_id=b_url.url_id).all():
-            # We already have the diff
+    dic = OrderedDict()
+    for url in a_urls:
+        dic.setdefault(url.url, {})
+        dic[url.url]['a_url'] = url
+
+    for url in b_urls:
+        dic.setdefault(url.url, {})
+        dic[url.url]['b_url'] = url
+
+    for data in dic.values():
+        a_url = data.get('a_url')
+        b_url = data.get('b_url')
+        kwargs = {
+            'a_version_project_id': a_version,
+            'b_version_project_id': b_version,
+        }
+        if a_url:
+            kwargs = {'a_url_id': a_url.url_id}
+        if b_url:
+            kwargs = {'b_url_id': b_url.url_id}
+        if dbsession.query(ScreenshotDiff).filter_by(**kwargs).all():
             continue
+        lis.append((TASK_SCREENSHOT_DIFF,
+                    (data.get('a_url'), data.get('b_url'))))
 
-        lis.append((TASK_SCREENSHOT_DIFF, (a_url, b_url)))
     return lis
 
 
@@ -76,16 +93,20 @@ async def screenshot(session_factory, url_id, url):
 
 
 async def screenshot_diff(session_factory, a_url, b_url):
+    dbsession = session_factory()
+
+    a_url = dbsession.query(Url).get(a_url.url_id)
+    b_url = dbsession.query(Url).get(b_url.url_id)
     a_s = [s for s in a_url.screenshots if s.device == 'desktop'][0]
     b_s = [s for s in b_url.screenshots if s.device == 'desktop'][0]
 
     diff_img = compare_blobs(a_s.screenshot, b_s.screenshot)
 
-    dbsession = session_factory()
-
     url_diff = ScreenshotDiff()
     url_diff.a_url_id = a_url.url_id
     url_diff.b_url_id = b_url.url_id
+    url_diff.a_project_version_id = a_url.project_version_id
+    url_diff.b_project_version_id = b_url.project_version_id
     url_diff.diff = diff_img
     dbsession.add(url_diff)
     dbsession.commit()
