@@ -56,17 +56,33 @@ export class MainComponent implements OnDestroy, OnInit {
     ).subscribe(() => this.setCurrentAction());
 
 
-    this.routeSub = this.route.paramMap.subscribe((params: Params) => {
-      this.projectService.setCurrentProject(
-        +params.params.projectId,
-        +params.params.versionId,
-      );
-
-      this.urlService.getUrls(+params.params.versionId).subscribe((urls) => {
-        this._urls = urls;
-        this.setUrls();
+    if (this.currentAction === 'diff') {
+      this.routeSub = this.route.parent.paramMap.subscribe((params: Params) => {
+        this.projectService.setCurrentProject(
+          +params.params.projectId,
+          +params.params.versionId,
+        );
       });
-    });
+
+      this.route.paramMap.subscribe((params: Params) => {
+        this.urlService.getDiffUrls(this.projectService.currentVersion.id, +params.params.b_id).subscribe((urls) => {
+          this._urls = urls;
+          this.setUrls();
+        });
+      });
+    } else {
+      this.routeSub = this.route.paramMap.subscribe((params: Params) => {
+        this.projectService.setCurrentProject(
+          +params.params.projectId,
+          +params.params.versionId,
+        );
+
+        this.urlService.getUrls(+params.params.versionId).subscribe((urls) => {
+          this._urls = urls;
+          this.setUrls();
+        });
+      });
+    }
 
     this.keyupSub = fromEvent(this.inputElRef.nativeElement, 'keyup').pipe(
       debounceTime(100),

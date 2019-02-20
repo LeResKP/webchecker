@@ -93,6 +93,16 @@ class ScreenshotDiff(Base):
     a_url_id = Column(Integer, ForeignKey("url.url_id"), nullable=False)
     b_url_id = Column(Integer, ForeignKey("url.url_id"), nullable=False)
 
+    a_project_version_id = Column(
+        Integer,
+        ForeignKey("project_version.project_version_id"),
+        nullable=False)
+
+    b_project_version_id = Column(
+        Integer,
+        ForeignKey("project_version.project_version_id"),
+        nullable=False)
+
     diff = Column(LargeBinary, nullable=True)
 
     a_url = relationship("Url", foreign_keys=[a_url_id])

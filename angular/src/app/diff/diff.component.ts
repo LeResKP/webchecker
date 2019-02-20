@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
+import { API_URL } from '../urls';
 import { UrlService } from '../url.service';
 
 @Component({
@@ -15,6 +16,7 @@ export class DiffComponent implements OnDestroy, OnInit {
   private sub: Subscription;
   public diff: any;
   public showLayer = true;
+  public api_url = API_URL;
 
   constructor(private route: ActivatedRoute, private urlService: UrlService) { }
 

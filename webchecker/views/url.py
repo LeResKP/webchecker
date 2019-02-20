@@ -38,10 +38,19 @@ def get_diff_image(request):
     return Response(sd.diff, content_type='image/png', status=200)
 
 
-@view_config(route_name='diff', request_method='GET', renderer='json')
-def diff(request):
-    a_url = request.dbsession.query(Url).get(request.matchdict['id'])
-    diff = request.dbsession.query(ScreenshotDiff).filter_by(b_url_id=a_url.url_id).one()
+@view_config(route_name='screenshot_diff', request_method='GET', renderer='json')
+def screenshot_diff(request):
+    diff = request.dbsession.query(ScreenshotDiff).get(request.matchdict['id'])
+    # TODO: we need the version to make the diff in the right order
+    # b_id = int(request.matchdict['b_id'])
+
+    # if b_id == diff.b_url.url_id:
+    #     a_url = diff.a_url
+    #     b_url = diff.b_url
+    # else:
+    #     a_url = diff.b_url
+    #     b_url = diff.a_url
+
     if diff.diff:
         return {
             'a_url_id': diff.a_url.get_desktop_screenshot().screenshot_id,
@@ -51,8 +60,29 @@ def diff(request):
     return {}
 
 
+@view_config(route_name='diff_urls', request_method='GET', renderer='json')
+def get_diff_urls(request):
+    a_version_id = request.matchdict['a_version_id']
+    b_version_id = request.matchdict['b_version_id']
+    from sqlalchemy import or_
+    diffs = request.dbsession.query(ScreenshotDiff).filter(
+        or_(ScreenshotDiff.a_project_version_id == a_version_id,
+            ScreenshotDiff.b_project_version_id == b_version_id)
+    )
+
+    res = []
+    for d in diffs:
+        res.append({
+            'url': (d.a_url or d.b_url).url,
+            'url_id': d.screenshot_diff_id,
+            'status': {},
+        })
+    return res
+
+
 def includeme(config):
     config.add_route('urls', '/api/v/:version_id/urls')
+    config.add_route('diff_urls', '/api/v/:a_version_id/d/:b_version_id/urls')
     config.add_route('url', '/api/urls/:url_id')
-    config.add_route('diff', '/api/urls/:id/diff')
+    config.add_route('screenshot_diff', '/api/urls/:id/diff')
     config.add_route('diff_image', '/api/diff/:id')
