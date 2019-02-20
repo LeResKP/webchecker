@@ -14,6 +14,7 @@ import { DiffComponent } from './diff/diff.component';
 import { ScreenshotComponent } from './screenshot/screenshot.component';
 import { ValidationComponent } from './validation/validation.component';
 import { DiffHomeComponent } from './diff/diff-home/diff-home.component';
+import { AppHomeComponent } from './app-home/app-home.component';
 
 
 const routes: Routes = [
@@ -86,7 +87,8 @@ const routes: Routes = [
     DiffComponent,
     ScreenshotComponent,
     ValidationComponent,
-    DiffHomeComponent
+    DiffHomeComponent,
+    AppHomeComponent
   ],
   imports: [
     BrowserModule,
