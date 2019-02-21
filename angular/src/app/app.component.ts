@@ -9,13 +9,7 @@ import { ProjectService } from './project.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  projects: any;
+  constructor() {}
 
-  constructor(public projectService: ProjectService) {}
-
-  ngOnInit() {
-    this.projectService.projects$.subscribe(res => {
-      this.projects = res;
-    });
-  }
+  ngOnInit() {}
 }

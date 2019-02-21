@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { flatMap, filter, first, shareReplay } from 'rxjs/operators';
 
 import { API_URL } from './urls';
@@ -16,6 +16,8 @@ export class ProjectService {
   currentProject: any;
   currentVersion: any;
   private _projects$: Observable<Array<any>>;
+  private _currentVersion = new ReplaySubject(1);
+  public currentVersion$ = this._currentVersion.asObservable();
 
   constructor(private http: HttpClient, private route: ActivatedRoute) { }
 
@@ -38,7 +40,15 @@ export class ProjectService {
     this.getProject$(projectId).subscribe(p => {
       this.currentProject = p;
       const versions = this.currentProject.versions.filter((v) => v.id === versionId);
+      // TODO: remove this.currentVersion
       this.currentVersion = versions.length ? versions[0] : null;
+      this.setCurrentVersion(this.currentVersion);
     });
+  }
+
+  setCurrentVersion(version) {
+    if (version) {
+      this._currentVersion.next(version);
+    }
   }
 }

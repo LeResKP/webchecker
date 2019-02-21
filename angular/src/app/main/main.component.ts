@@ -1,10 +1,10 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
 
-import { Subscription, fromEvent } from 'rxjs';
+import { Subscription, combineLatest, fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 
-import { filter, map, switchMap } from 'rxjs/operators';
+import { filter, flatMap, map, switchMap } from 'rxjs/operators';
 import { of, pipe, from } from 'rxjs';
 
 
@@ -57,27 +57,19 @@ export class MainComponent implements OnDestroy, OnInit {
 
 
     if (this.currentAction === 'diff') {
-      this.routeSub = this.route.parent.paramMap.subscribe((params: Params) => {
-        this.projectService.setCurrentProject(
-          +params.params.projectId,
-          +params.params.versionId,
-        );
-      });
-
-      this.route.paramMap.subscribe((params: Params) => {
-        this.urlService.getDiffUrls(this.projectService.currentVersion.id, +params.params.b_id).subscribe((urls) => {
+      this.routeSub = combineLatest(
+        this.route.paramMap,
+        this.projectService.currentVersion$,
+        (params: Params, version: any) => ({'b_version_id': +params.params['b_id'], 'a_version_id': version.id})
+      ).subscribe((data) => {
+        this.urlService.getDiffUrls(data.a_version_id, data.b_version_id).subscribe((urls) => {
           this._urls = urls;
           this.setUrls();
         });
       });
     } else {
-      this.routeSub = this.route.paramMap.subscribe((params: Params) => {
-        this.projectService.setCurrentProject(
-          +params.params.projectId,
-          +params.params.versionId,
-        );
-
-        this.urlService.getUrls(+params.params.versionId).subscribe((urls) => {
+      this.routeSub = this.projectService.currentVersion$.subscribe(() => {
+        this.urlService.getUrls(this.projectService.currentVersion.id).subscribe((urls) => {
           this._urls = urls;
           this.setUrls();
         });
@@ -106,6 +98,7 @@ export class MainComponent implements OnDestroy, OnInit {
 
   ngOnDestroy() {
     this.keyupSub.unsubscribe();
+    this.routeSub.unsubscribe();
   }
 
 }

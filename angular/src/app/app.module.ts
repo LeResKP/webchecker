@@ -8,6 +8,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
 import { ProjectGuard } from './project.guard';
+import { ProjectLoadedGuard } from './project-loaded.guard';
 import { UrlsComponent } from './urls/urls.component';
 import { MainComponent } from './main/main.component';
 import { DiffComponent } from './diff/diff.component';
@@ -26,6 +27,8 @@ const routes: Routes = [
   },
   {
     path: 'p/:projectId/v/:versionId',
+    component: AppHomeComponent,
+    canActivate: [ProjectLoadedGuard],
     children: [
       {
         path: '',
