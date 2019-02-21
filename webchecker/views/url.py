@@ -64,11 +64,14 @@ def screenshot_diff(request):
 def get_diff_urls(request):
     a_version_id = request.matchdict['a_version_id']
     b_version_id = request.matchdict['b_version_id']
-    from sqlalchemy import or_
+    from sqlalchemy import or_, and_
     diffs = request.dbsession.query(ScreenshotDiff).filter(
-        or_(ScreenshotDiff.a_project_version_id == a_version_id,
-            ScreenshotDiff.b_project_version_id == b_version_id)
-    )
+        or_(
+            and_(ScreenshotDiff.a_project_version_id == a_version_id,
+                 ScreenshotDiff.b_project_version_id == b_version_id),
+            and_(ScreenshotDiff.a_project_version_id == b_version_id,
+                 ScreenshotDiff.b_project_version_id == a_version_id)
+        )).all()
 
     res = []
     for d in diffs:
