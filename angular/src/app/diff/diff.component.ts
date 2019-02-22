@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 
-import { Subscription } from 'rxjs';
+import { Subscription, combineLatest } from 'rxjs';
 
 import { API_URL } from '../urls';
+import { ProjectService } from '../project.service';
 import { UrlService } from '../url.service';
 
 @Component({
@@ -13,22 +14,27 @@ import { UrlService } from '../url.service';
 })
 export class DiffComponent implements OnDestroy, OnInit {
 
-  private sub: Subscription;
   public diff: any;
   public showLayer = true;
   public api_url = API_URL;
+  private routeSub: Subscription;
 
-  constructor(private route: ActivatedRoute, private urlService: UrlService) { }
+  constructor(private route: ActivatedRoute, private projectService: ProjectService, private urlService: UrlService) { }
 
   ngOnInit() {
-    this.sub = this.route.params.subscribe(params => {
-      this.urlService.getDiff(+params['id']).subscribe((res) => {
+
+    this.routeSub = combineLatest(
+      this.route.paramMap,
+      this.projectService.currentVersion$,
+      (params: Params, version: any) => ({'screenshot_id': +params.params['id'], 'a_version_id': version.id})
+    ).subscribe((data) => {
+      this.urlService.getDiff(data['screenshot_id'], data['a_version_id']).subscribe((res) => {
         this.diff = res;
       });
     });
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.routeSub.unsubscribe();
   }
 }

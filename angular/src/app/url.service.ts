@@ -63,7 +63,7 @@ export class UrlService {
     return this.http.get(`${API_URL}/urls/${urlId}/validation`);
   }
 
-  getDiff(urlId) {
-    return this.http.get(`${API_URL}/urls/${urlId}/diff`);
+  getDiff(screenshotId, aVersionId) {
+    return this.http.get(`${API_URL}/diff/${aVersionId}/screenshots/${screenshotId}`);
   }
 }
