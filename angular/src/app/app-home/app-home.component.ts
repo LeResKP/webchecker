@@ -15,6 +15,7 @@ export class AppHomeComponent implements OnDestroy, OnInit {
 
   routeSub: Subscription;
   projects: any;
+  currentAction = 'v';  // validation page by default
 
   constructor(private route: ActivatedRoute, public projectService: ProjectService) {}
 
@@ -29,6 +30,10 @@ export class AppHomeComponent implements OnDestroy, OnInit {
         +params.params.versionId,
       );
     });
+  }
+
+  setCurrentAction(action) {
+    this.currentAction = action;
   }
 
   ngOnDestroy() {
