@@ -14,7 +14,7 @@
           </a>
           <div ngbDropdownMenu>
             <ng-template ngFor let-project [ngForOf]="projects">
-              <a class="dropdown-item" href="#" [routerLink]="['/p', project.id, 'v', project.current_version.id]" [class.active]="project === projectService.currentProject">{{ project.name }}</a>
+              <a class="dropdown-item" href="#" [routerLink]="['/p', project.id, 'v', project.current_version.id, currentAction]" [class.active]="project === projectService.currentProject">{{ project.name }}</a>
             </ng-template>
           </div>
         </li>
@@ -25,15 +25,15 @@
           </a>
           <div ngbDropdownMenu>
             <ng-template ngFor let-version [ngForOf]="projectService.currentProject.versions">
-              <a class="dropdown-item" href="#" [routerLink]="['/p', projectService.currentProject.id, 'v', version.id]" [class.active]="version.id === projectService.currentVersion.id">{{ version.version }}</a>
+              <a class="dropdown-item" href="#" [routerLink]="['/p', projectService.currentProject.id, 'v', version.id, currentAction]" [class.active]="version.id === projectService.currentVersion.id">{{ version.version }}</a>
             </ng-template>
           </div>
         </li>
-        <li class="nav-item" *ngIf="projectService.currentProject" routerLinkActive="active">
-          <a class="nav-link" [routerLink]="['/p', projectService.currentProject.id, 'v', projectService.currentVersion.id, 'v']" >Validation</a>
+        <li class="nav-item" *ngIf="projectService.currentProject" [class.active]="currentAction === 'v'">
+          <a class="nav-link" [routerLink]="['/p', projectService.currentProject.id, 'v', projectService.currentVersion.id, 'v']" (click)="setCurrentAction('v');">Validation</a>
         </li>
-        <li class="nav-item" *ngIf="projectService.currentProject"routerLinkActive="active">
-          <a class="nav-link" [routerLink]="['/p', projectService.currentProject.id, 'v', projectService.currentVersion.id, 'd']">Diff</a>
+        <li class="nav-item" *ngIf="projectService.currentProject" [class.active]="currentAction === 'd'">
+          <a class="nav-link" [routerLink]="['/p', projectService.currentProject.id, 'v', projectService.currentVersion.id, 'd']" (click)="setCurrentAction('d');">Diff</a>
         </li>
       </ul>
     </div>
