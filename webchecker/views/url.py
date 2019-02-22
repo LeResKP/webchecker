@@ -40,21 +40,24 @@ def get_diff_image(request):
 
 @view_config(route_name='screenshot_diff', request_method='GET', renderer='json')
 def screenshot_diff(request):
-    diff = request.dbsession.query(ScreenshotDiff).get(request.matchdict['id'])
-    # TODO: we need the version to make the diff in the right order
-    # b_id = int(request.matchdict['b_id'])
+    diff = request.dbsession.query(ScreenshotDiff).get(
+        request.matchdict['screenshot_diff_id'])
 
-    # if b_id == diff.b_url.url_id:
-    #     a_url = diff.a_url
-    #     b_url = diff.b_url
-    # else:
-    #     a_url = diff.b_url
-    #     b_url = diff.a_url
+    a_version_id = int(request.matchdict['a_version_id'])
+
+    if a_version_id == diff.a_url.project_version_id:
+        a_url = diff.a_url
+        b_url = diff.b_url
+    else:
+        a_url = diff.b_url
+        b_url = diff.a_url
 
     if diff.diff:
         return {
-            'a_url_id': diff.a_url.get_desktop_screenshot().screenshot_id,
-            'b_url_id': diff.b_url.get_desktop_screenshot().screenshot_id,
+            'a_url_id': a_url.get_desktop_screenshot().screenshot_id,
+            'b_url_id': b_url.get_desktop_screenshot().screenshot_id,
+            # TODO: we should be able to remove it since we already have it in
+            # the component.
             'screenshot_diff_id': diff.screenshot_diff_id,
         }
     return {}
@@ -87,5 +90,6 @@ def includeme(config):
     config.add_route('urls', '/api/v/:version_id/urls')
     config.add_route('diff_urls', '/api/v/:a_version_id/d/:b_version_id/urls')
     config.add_route('url', '/api/urls/:url_id')
-    config.add_route('screenshot_diff', '/api/urls/:id/diff')
+    config.add_route('screenshot_diff',
+                     '/api/diff/:a_version_id/screenshots/:screenshot_diff_id')
     config.add_route('diff_image', '/api/diff/:id')
