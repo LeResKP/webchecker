@@ -37,50 +37,64 @@ const routes: Routes = [
         pathMatch: 'full',
       },
       {
-      path: 'v',
-      component: MainComponent,
-      data: {'defaultAction': 'validation'},
-      children: [
-        {
-          path: 'urls/:id',
-          component: UrlsComponent,
-          children: [
-            {
-              path: 'validation',
-              component: ValidationComponent,
-            },
-            {
-              path: 'screenshots',
-              component: ScreenshotComponent,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      path: 'd',
-      component: DiffHomeComponent,
-      children: [
-        {
-          path: ':b_id',
-          component: MainComponent,
-          data: {'defaultAction': 'diff'},
-          children: [
-            {
-              path: 'urls/:id',
-              children: [
-                {
-                  path: 'diff',
-                  component: DiffComponent,
-                },
-              ],
-            },
-          ],
-        }
-      ]
-    }
+        path: 'v',
+        component: ActionComponent,
+        data: {'action': 'v'},
+        children: [
+          {
+            path: '',
+            component: MainComponent,
+            data: {'defaultAction': 'validation'},
+            children: [
+              {
+                path: 'urls/:id',
+                component: UrlsComponent,
+                children: [
+                  {
+                    path: 'validation',
+                    component: ValidationComponent,
+                  },
+                  {
+                    path: 'screenshots',
+                    component: ScreenshotComponent,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: 'd',
+        component: ActionComponent,
+        data: {'action': 'd'},
+        children: [
+          {
+            path: ':b_id',
+            component: DiffHomeComponent,
+            children: [
+              {
+                path: '',
+                component: MainComponent,
+                data: {'defaultAction': 'diff'},
+                children: [
+                  {
+                    path: 'urls/:id',
+                    children: [
+                      {
+                        path: 'diff',
+                        component: DiffComponent,
+                      },
+                    ],
+                  },
+                ],
+              }
+            ]
+          },
+        ],
+      },
     ]
-  },
+  }
 ];
 
 @NgModule({

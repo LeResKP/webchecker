@@ -19,6 +19,10 @@ export class ProjectService {
   private _currentVersion = new ReplaySubject(1);
   public currentVersion$ = this._currentVersion.asObservable();
 
+  private defaultAction = 'v';
+  public currentAction = this.defaultAction;
+  public diffVersion = null;
+
   constructor(private http: HttpClient, private route: ActivatedRoute) { }
 
   get projects$() {
@@ -50,5 +54,26 @@ export class ProjectService {
     if (version) {
       this._currentVersion.next(version);
     }
+  }
+
+  setCurrentAction(action) {
+    // We need because of the change detection. We are updating the value in a
+    // child component.
+    setTimeout( () => {
+      this.currentAction = action;
+    });
+  }
+
+  resetCurrentAction() {
+    this.setCurrentAction(this.defaultAction);
+  }
+
+  getVersion(versionId) {
+    const versions = this.currentProject.versions.filter((v) => v.id === versionId);
+    return versions.length ? versions[0] : null;
+  }
+
+  setDiffVersion(versionId) {
+    this.diffVersion = this.getVersion(versionId);
   }
 }

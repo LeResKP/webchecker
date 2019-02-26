@@ -14,7 +14,7 @@
           </a>
           <div ngbDropdownMenu>
             <ng-template ngFor let-project [ngForOf]="projects">
-              <a class="dropdown-item" href="#" [routerLink]="['/p', project.id, 'v', project.current_version.id, currentAction]" [class.active]="project === projectService.currentProject">{{ project.name }}</a>
+              <a class="dropdown-item" href="#" [routerLink]="['/p', project.id, 'v', project.current_version.id, projectService.currentAction]" [class.active]="project === projectService.currentProject">{{ project.name }}</a>
             </ng-template>
           </div>
         </li>
@@ -25,15 +25,15 @@
           </a>
           <div ngbDropdownMenu>
             <ng-template ngFor let-version [ngForOf]="projectService.currentProject.versions">
-              <a class="dropdown-item" href="#" [routerLink]="['/p', projectService.currentProject.id, 'v', version.id, currentAction]" [class.active]="version.id === projectService.currentVersion.id">{{ version.version }}</a>
+              <a class="dropdown-item" href="#" [routerLink]="['/p', projectService.currentProject.id, 'v', version.id, projectService.currentAction]" [class.active]="version.id === projectService.currentVersion.id">{{ version.version }}</a>
             </ng-template>
           </div>
         </li>
 
         <li class="nav-item" ngbDropdown *ngIf="projectService.currentProject">
           <a class="nav-link active" role="button" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
-            <ng-template [ngIf]="currentAction">Action:
-              <ng-template [ngIf]="currentAction == 'v'" [ngIfElse]="diff">
+            <ng-template [ngIf]="projectService.currentAction">Action:
+              <ng-template [ngIf]="projectService.currentAction == 'v'" [ngIfElse]="diff">
                 Validation
               </ng-template>
               <ng-template #diff>
@@ -42,8 +42,20 @@
             </ng-template>
           </a>
           <div ngbDropdownMenu>
-            <a class="dropdown-item" [class.active]="currentAction === 'v'" [routerLink]="['/p', projectService.currentProject.id, 'v', projectService.currentVersion.id, 'v']" (click)="setCurrentAction('v');">Validation</a>
-            <a class="dropdown-item" [class.active]="currentAction === 'd'" [routerLink]="['/p', projectService.currentProject.id, 'v', projectService.currentVersion.id, 'd']" (click)="setCurrentAction('d');">Diff</a>
+            <a class="dropdown-item" [class.active]="projectService.currentAction === 'v'" [routerLink]="['/p', projectService.currentProject.id, 'v', projectService.currentVersion.id, 'v']">Validation</a>
+            <a class="dropdown-item" [class.active]="projectService.currentAction === 'd'" [routerLink]="['/p', projectService.currentProject.id, 'v', projectService.currentVersion.id, 'd']">Diff</a>
+          </div>
+        </li>
+
+        <li ngbDropdown *ngIf="projectService.currentVersion && projectService.currentAction === 'd'">
+          <a class="nav-link active" role="button" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+            Against: <ng-template [ngIf]="projectService.diffVersion" [ngIfElse]="noDiffVersion">{{ projectService.diffVersion.version }}</ng-template>
+            <ng-template #noDiffVersion>Against: Choose version for diff</ng-template>
+          </a>
+          <div class="dropdown-menu" ngbDropdownMenu>
+            <ng-template ngFor let-version [ngForOf]="projectService.currentProject.versions">
+              <a class="dropdown-item" href="#" [routerLink]="['/p', projectService.currentProject.id, 'v', projectService.currentVersion.id, 'd', version.id]" routerLinkActive="active"  *ngIf="version.id !== projectService.currentVersion.id">{{ version.version }}</a>
+            </ng-template>
           </div>
         </li>
       </ul>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { ProjectService } from '../../project.service';
@@ -9,10 +9,16 @@ import { ProjectService } from '../../project.service';
   templateUrl: './diff-home.component.html',
   styleUrls: ['./diff-home.component.css']
 })
-export class DiffHomeComponent implements OnInit {
+export class DiffHomeComponent implements OnDestroy, OnInit {
 
   constructor(private route: ActivatedRoute, private projectService: ProjectService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.projectService.setDiffVersion(+this.route.snapshot.params['b_id']);
+  }
+
+  ngOnDestroy() {
+    this.projectService.diffVersion = null;
+  }
 
 }
