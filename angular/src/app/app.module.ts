@@ -9,7 +9,6 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { ProjectGuard } from './project.guard';
 import { ProjectLoadedGuard } from './project-loaded.guard';
-import { UrlsComponent } from './urls/urls.component';
 import { MainComponent } from './main/main.component';
 import { DiffComponent } from './diff/diff.component';
 import { ScreenshotComponent } from './screenshot/screenshot.component';
@@ -48,17 +47,25 @@ const routes: Routes = [
             children: [
               {
                 path: 'urls/:id',
-                component: UrlsComponent,
-                children: [
-                  {
-                    path: 'validation',
-                    component: ValidationComponent,
-                  },
-                  {
-                    path: 'screenshots',
-                    component: ScreenshotComponent,
-                  },
-                ],
+                component: ValidationComponent,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: 's',
+        component: ActionComponent,
+        data: {'action': 's'},
+        children: [
+          {
+            path: '',
+            component: MainComponent,
+            data: {'defaultAction': 'screenshot'},
+            children: [
+              {
+                path: 'urls/:id',
+                component: ScreenshotComponent,
               },
             ],
           },
@@ -100,7 +107,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    UrlsComponent,
     MainComponent,
     DiffComponent,
     ScreenshotComponent,

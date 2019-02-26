@@ -29,7 +29,7 @@ export class ScreenshotComponent implements OnDestroy, OnInit {
   constructor(private route: ActivatedRoute, private urlService: UrlService) { }
 
   ngOnInit() {
-    this.sub = this.route.parent.params.subscribe(params => {
+    this.sub = this.route.params.subscribe(params => {
       this.urlService.getUrl(+params['id']).subscribe((url) => {
         this.url = url;
         if (this.tabset) {
