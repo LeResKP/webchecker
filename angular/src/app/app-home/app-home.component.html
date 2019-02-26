@@ -43,6 +43,7 @@
           </a>
           <div ngbDropdownMenu>
             <a class="dropdown-item" [class.active]="projectService.currentAction === 'v'" [routerLink]="['/p', projectService.currentProject.id, 'v', projectService.currentVersion.id, 'v']">Validation</a>
+            <a class="dropdown-item" [class.active]="projectService.currentAction === 's'" [routerLink]="['/p', projectService.currentProject.id, 'v', projectService.currentVersion.id, 's']">Screenshot</a>
             <a class="dropdown-item" [class.active]="projectService.currentAction === 'd'" [routerLink]="['/p', projectService.currentProject.id, 'v', projectService.currentVersion.id, 'd']">Diff</a>
           </div>
         </li>

@@ -19,7 +19,7 @@ export class ValidationComponent implements OnDestroy, OnInit {
   constructor(private route: ActivatedRoute, private urlService: UrlService) { }
 
   ngOnInit() {
-    this.sub = this.route.parent.params.subscribe(params => {
+    this.sub = this.route.params.subscribe(params => {
       this.urlService.getValidation(+params['id']).subscribe((res) => {
         this.validationMessages = res['messages'];
       });
