@@ -33,12 +33,11 @@
         <li class="nav-item" ngbDropdown *ngIf="projectService.currentProject">
           <a class="nav-link active" role="button" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
             <ng-template [ngIf]="projectService.currentAction">Action:
-              <ng-template [ngIf]="projectService.currentAction == 'v'" [ngIfElse]="diff">
-                Validation
-              </ng-template>
-              <ng-template #diff>
-                Diff
-              </ng-template>
+              <ng-container [ngSwitch]="projectService.currentAction">
+                  <ng-template ngSwitchCase="v">Validation</ng-template>
+                  <ng-template ngSwitchCase="s">Screenshot</ng-template>
+                  <ng-template ngSwitchCase="d">Diff</ng-template>
+              </ng-container>
             </ng-template>
           </a>
           <div ngbDropdownMenu>
