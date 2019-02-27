@@ -16,6 +16,7 @@ import { ValidationComponent } from './validation/validation.component';
 import { DiffHomeComponent } from './diff/diff-home/diff-home.component';
 import { AppHomeComponent } from './app-home/app-home.component';
 import { ActionComponent } from './action/action.component';
+import { UrlsComponent } from './urls/urls.component';
 
 
 const routes: Routes = [
@@ -87,12 +88,7 @@ const routes: Routes = [
                 children: [
                   {
                     path: 'urls/:id',
-                    children: [
-                      {
-                        path: 'diff',
-                        component: DiffComponent,
-                      },
-                    ],
+                    component: DiffComponent,
                   },
                 ],
               }
@@ -113,7 +109,8 @@ const routes: Routes = [
     ValidationComponent,
     DiffHomeComponent,
     AppHomeComponent,
-    ActionComponent
+    ActionComponent,
+    UrlsComponent
   ],
   imports: [
     BrowserModule,

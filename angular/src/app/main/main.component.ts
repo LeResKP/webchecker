@@ -8,7 +8,6 @@ import { filter, flatMap, map, switchMap } from 'rxjs/operators';
 import { of, pipe, from } from 'rxjs';
 
 
-import { STATUS } from '../constants';
 
 import { ProjectService } from '../project.service';
 import { UrlService } from '../url.service';
@@ -22,15 +21,9 @@ import { UrlService } from '../url.service';
 export class MainComponent implements OnDestroy, OnInit {
 
   urls = <any>[];
-  _urls = <any>[];
-  STATUS = STATUS;
 
   projects: any;
   routeSub: Subscription;
-
-  filterModel = null;
-  keyupSub:  Subscription;
-  @ViewChild('input') inputElRef: ElementRef;
 
   public currentAction: string;
 
@@ -63,41 +56,19 @@ export class MainComponent implements OnDestroy, OnInit {
         (params: Params, version: any) => ({'b_version_id': +params.params['b_id'], 'a_version_id': version.id})
       ).subscribe((data) => {
         this.urlService.getDiffUrls(data.a_version_id, data.b_version_id).subscribe((urls) => {
-          this._urls = urls;
-          this.setUrls();
+          this.urls = urls;
         });
       });
     } else {
       this.routeSub = this.projectService.currentVersion$.subscribe(() => {
         this.urlService.getUrls(this.projectService.currentVersion.id).subscribe((urls) => {
-          this._urls = urls;
-          this.setUrls();
+          this.urls = urls;
         });
       });
     }
-
-    this.keyupSub = fromEvent(this.inputElRef.nativeElement, 'keyup').pipe(
-      debounceTime(100),
-      distinctUntilChanged(),
-    ).subscribe((event: KeyboardEvent) => {
-      this.urls = this._urls.filter(v => v.url.indexOf((<HTMLInputElement>event.target).value) > -1);
-      this.setUrls();
-    });
-  }
-
-
-  setUrls() {
-    this.urls = this._urls
-      .filter(v => this.filterModel ? v.status.status === this.filterModel : true)
-      .filter(v => this.inputElRef.nativeElement.value ? v.url.indexOf(this.inputElRef.nativeElement.value) > -1 : true);
-  }
-
-  onChange() {
-    this.setUrls();
   }
 
   ngOnDestroy() {
-    this.keyupSub.unsubscribe();
     this.routeSub.unsubscribe();
   }
 
