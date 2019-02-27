@@ -9,7 +9,6 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { ProjectGuard } from './project.guard';
 import { ProjectLoadedGuard } from './project-loaded.guard';
-import { MainComponent } from './main/main.component';
 import { DiffComponent } from './diff/diff.component';
 import { ScreenshotComponent } from './screenshot/screenshot.component';
 import { ValidationComponent } from './validation/validation.component';
@@ -17,6 +16,8 @@ import { DiffHomeComponent } from './diff/diff-home/diff-home.component';
 import { AppHomeComponent } from './app-home/app-home.component';
 import { ActionComponent } from './action/action.component';
 import { UrlsComponent } from './urls/urls.component';
+import { ValidationHomeComponent } from './validation/validation-home/validation-home.component';
+import { ScreenshotHomeComponent } from './screenshot/screenshot-home/screenshot-home.component';
 
 
 const routes: Routes = [
@@ -43,8 +44,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: MainComponent,
-            data: {'defaultAction': 'validation'},
+            component: ValidationHomeComponent,
             children: [
               {
                 path: 'urls/:id',
@@ -61,8 +61,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: MainComponent,
-            data: {'defaultAction': 'screenshot'},
+            component: ScreenshotHomeComponent,
             children: [
               {
                 path: 'urls/:id',
@@ -82,15 +81,8 @@ const routes: Routes = [
             component: DiffHomeComponent,
             children: [
               {
-                path: '',
-                component: MainComponent,
-                data: {'defaultAction': 'diff'},
-                children: [
-                  {
-                    path: 'urls/:id',
-                    component: DiffComponent,
-                  },
-                ],
+                path: 'urls/:id',
+                component: DiffComponent,
               }
             ]
           },
@@ -103,14 +95,15 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    MainComponent,
     DiffComponent,
     ScreenshotComponent,
     ValidationComponent,
     DiffHomeComponent,
     AppHomeComponent,
     ActionComponent,
-    UrlsComponent
+    UrlsComponent,
+    ValidationHomeComponent,
+    ScreenshotHomeComponent
   ],
   imports: [
     BrowserModule,
