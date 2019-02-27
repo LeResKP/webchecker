@@ -74,6 +74,10 @@ export class ProjectService {
   }
 
   setDiffVersion(versionId) {
-    this.diffVersion = this.getVersion(versionId);
+    // We need because of the change detection. We are updating the value in a
+    // child component.
+    setTimeout( () => {
+      this.diffVersion = this.getVersion(versionId);
+    });
   }
 }
