@@ -1,9 +1,14 @@
+body {
+  /* because of the fixed navbar */
+  padding-top: 4.5rem;
+}
+
 img {
   max-width: 100%;
 }
 
-.webchecker-app {
-  padding-top: 20px;
+nav {
+  margin-bottom: 20px;
 }
 
 .fa-check {
@@ -17,16 +22,6 @@ img {
 .list-group-url {
   overflow: auto;
   height: calc(100vh - 20px);
-}
-
-.validation {
-  overflow: auto;
-  height: calc(100vh - 20px - 24px - 2px);
-}
-
-.screenshots {
-  overflow: auto;
-  height: calc(100vh - 20px - 97px);
 }
 
 .list-group-url a {
