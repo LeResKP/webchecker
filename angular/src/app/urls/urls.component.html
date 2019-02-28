@@ -1,17 +1,6 @@
   <input type="text" class="form-control" #input />
-  <div class="text-center">
-    <div class="btn-group btn-group-sm btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="filterModel" (ngModelChange)="onChange($event)">
-      <label ngbButtonLabel class="btn-primary">
-        <input ngbButton type="radio" [value]="null"> All
-      </label>
-      <label ngbButtonLabel class="btn-primary">
-        <input ngbButton type="radio" [value]="STATUS.GOOD"> Good
-      </label>
-      <label ngbButtonLabel class="btn-primary">
-        <input ngbButton type="radio" [value]="STATUS.BAD"> Bad
-      </label>
-    </div>
-  </div>
+
+   <ng-content></ng-content>
 
   <br>
 

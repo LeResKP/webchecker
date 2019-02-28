@@ -1,17 +1,22 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 import { ProjectService } from '../../project.service';
 import { UrlService } from '../../url.service';
 
+import { STATUS } from '../../constants';
+
 
 @Component({
   selector: 'app-screenshot-home',
-  templateUrl: '../../action-home.component.html',
+  templateUrl: './screenshot-home.component.html',
   styles: []
 })
 export class ScreenshotHomeComponent implements OnDestroy, OnInit {
+  STATUS = STATUS;
+  filterModel = null;
 
   routeSub: Subscription;
   urls = <any>[];
@@ -25,6 +30,13 @@ export class ScreenshotHomeComponent implements OnDestroy, OnInit {
         });
       });
   }
+
+  filterFunction(url) {
+    return this.filterModel ? url.status.status === this.filterModel : true;
+  }
+
+
+  filterFunctionBound = (x) => this.filterFunction(x);
 
   ngOnDestroy() {
     this.routeSub.unsubscribe();
