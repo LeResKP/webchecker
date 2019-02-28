@@ -35,6 +35,8 @@ export class UrlsComponent implements OnDestroy, OnInit {
     return this._urls;
   }
 
+  @Input() filter: Function = ((u) => true);
+
   keyupSub:  Subscription;
   filterModel = null;
 
@@ -55,7 +57,7 @@ export class UrlsComponent implements OnDestroy, OnInit {
 
   setUrls() {
     this.filteredUrls = this.urls
-      .filter(v => this.filterModel ? v.status.status === this.filterModel : true)
+      .filter(v => this.filter(v))
       .filter(v => this.inputElRef.nativeElement.value ? v.url.indexOf(this.inputElRef.nativeElement.value) > -1 : true);
   }
 
