@@ -17,7 +17,7 @@
         <br>
         <br>
         <div class="text-center mb-5">
-          <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [ngModel]="url.status.devices[device.id]?.status" (ngModelChange)="statusChange(url.url_id, device, url.status.devices[device.id]?.id, $event)">
+          <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [ngModel]="url.status.devices[device.id]?.status" (ngModelChange)="statusChange(url, device, url.status.devices[device.id]?.id, $event)">
             <label ngbButtonLabel class="btn-primary">
               <input ngbButton type="radio" [value]="STATUS.GOOD"> Good
             </label>
