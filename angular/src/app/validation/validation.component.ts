@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 export class ValidationComponent implements OnDestroy, OnInit {
 
   private sub: Subscription;
+  public valid: boolean;
   public validationMessages = [];
 
   constructor(private route: ActivatedRoute, private urlService: UrlService) { }
@@ -21,6 +22,7 @@ export class ValidationComponent implements OnDestroy, OnInit {
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.urlService.getValidation(+params['id']).subscribe((res) => {
+        this.valid = res['valid'];
         this.validationMessages = res['messages'];
       });
     });

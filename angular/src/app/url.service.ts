@@ -21,6 +21,10 @@ export class UrlService {
     return this.http.get<Array<any>>(`${API_URL}/v/${versionId}/urls`);
   }
 
+  getValidationUrls(versionId): Observable<Array<any>> {
+    return this.http.get<Array<any>>(`${API_URL}/v/${versionId}/validations`);
+  }
+
   getDiffUrls(aVersionId, bVersionId): Observable<Array<any>> {
     return this.http.get<Array<any>>(`${API_URL}/v/${aVersionId}/d/${bVersionId}/urls`);
   }

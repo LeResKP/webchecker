@@ -5,7 +5,7 @@ import zope.sqlalchemy
 
 # import or define all models here to ensure they are attached to the
 # Base.metadata prior to any initialization routines
-from .url import Url, Screenshot, ScreenshotDiff, UrlStatus  # noqa
+from .url import Url, Screenshot, ScreenshotDiff, UrlStatus, Validation  # noqa
 from .project import Project, ProjectVersion  # noqa
 
 # run configure_mappers after defining all of the models to ensure
