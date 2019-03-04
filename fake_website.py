@@ -20,8 +20,10 @@ INDEX_HTML = b'''
 '''
 
 OK_INDEX_HTML = b'''
+<!DOCTYPE html>
 <html>
 <head>
+  <title>Ok</title>
   <link href="/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
