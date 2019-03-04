@@ -1,6 +1,7 @@
 import base64
 
 from sqlalchemy import (
+    Boolean,
     Column,
     Integer,
     Text,
@@ -8,7 +9,7 @@ from sqlalchemy import (
     ForeignKey,
 )
 from sqlalchemy.orm import relationship
-
+from sqlalchemy.dialects.postgresql import JSON
 
 from .meta import Base
 from .constants import (
@@ -28,6 +29,7 @@ class Url(Base):
 
     screenshots = relationship("Screenshot", uselist=True)
     statuses = relationship("UrlStatus", uselist=True, back_populates="url")
+    validation = relationship("Validation", uselist=False)
 
     def __json__(self, request):
         dic = {
@@ -84,6 +86,14 @@ class Screenshot(Base):
     url_id = Column(Integer, ForeignKey("url.url_id"), nullable=False)
     device = Column(Text, nullable=False)
     screenshot = Column(LargeBinary, nullable=False)
+
+
+class Validation(Base):
+    __tablename__ = 'validation'
+    validation_id = Column(Integer, primary_key=True)
+    url_id = Column(Integer, ForeignKey("url.url_id"), nullable=False)
+    valid = Column(Boolean, nullable=True)
+    errors = Column(JSON, nullable=True)
 
 
 class ScreenshotDiff(Base):

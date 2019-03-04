@@ -6,7 +6,7 @@ import base64
 import requests
 import transaction
 
-from ..models import Url, Screenshot, UrlStatus
+from ..models import Url, Screenshot, UrlStatus, Validation
 
 
 @view_config(route_name='screenshots', request_method='GET')
@@ -74,23 +74,14 @@ def do_screenshot(request):
 
 @view_config(route_name='validation', request_method='GET', renderer='json')
 def do_validation(request):
-    # TODO: add a cache on the validation to do call too much
-    # http://html5.validator.nu/
-    url = request.dbsession.query(Url).filter_by(
+    val = request.dbsession.query(Validation).filter_by(
         url_id=request.matchdict['id']).one_or_none()
-    if not url:
+    if not val:
         raise exc.HTTPNotFound()
-
-    r = requests.get(url.url)
-    content = r.content
-
-    headers = {'Content-type': 'text/html; charset=utf-8'}
-    r = requests.post(
-        "http://html5.validator.nu/",
-        params={'out': 'json'},
-        data=content,
-        headers=headers)
-    return r.json()
+    return {
+        'valid': val.valid,
+        'messages': val.errors['messages'],
+    }
 
 
 # Need for cors

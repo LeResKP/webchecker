@@ -86,8 +86,28 @@ def get_diff_urls(request):
     return res
 
 
+@view_config(route_name='validation_urls',
+             request_method='GET', renderer='json')
+def get_valdiation_urls(request):
+    pv = request.dbsession.query(ProjectVersion).get(
+        request.matchdict['version_id'])
+
+    if not pv:
+        raise exc.HTTPBadRequest()
+
+    lis = []
+    for url in pv.urls:
+        lis.append({
+            'url_id': url.url_id,
+            'url': url.url,
+            'valid': url.validation.valid,
+        })
+    return lis
+
+
 def includeme(config):
     config.add_route('urls', '/api/v/:version_id/urls')
+    config.add_route('validation_urls', '/api/v/:version_id/validations')
     config.add_route('diff_urls', '/api/v/:a_version_id/d/:b_version_id/urls')
     config.add_route('url', '/api/urls/:url_id')
     config.add_route('screenshot_diff',

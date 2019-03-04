@@ -1,6 +1,7 @@
 <h5 class="text-center">w3c validation</h5>
 <div class="validation">
-  <ul>
+  <ul *ngIf="valid === false">
     <li *ngFor="let error of validationMessages">{{error.type}} (line {{error.lastLine}}): {{error.message}}<br> <code>{{error.extract}}</code></li>
   </ul>
+  <span *ngIf="valid === true">No errors</span>
 </div>

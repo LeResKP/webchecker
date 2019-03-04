@@ -1,8 +1,8 @@
 import asyncio
+from collections import OrderedDict
 import os
 import sys
-
-from collections import OrderedDict
+import requests
 
 from pyramid.paster import (
     get_appsettings,
@@ -13,15 +13,25 @@ from webchecker.models import (
     Screenshot,
     ScreenshotDiff,
     Url,
+    Validation,
     get_engine,
     get_session_factory,
     )
+from webchecker.tools.validation import validate
 from webchecker.tools.screenshot import do_screenshot
 from webchecker.tools.screenshot_diff import compare_blobs
 
 
 TASK_SCREENSHOT = 'screenshot'
 TASK_SCREENSHOT_DIFF = 'screenshot_diff'
+TASK_VALIDATION = 'validation'
+
+
+def get_validation_tasks(session_factory):
+    dbsession = session_factory()
+    urls = dbsession.query(Url).outerjoin(Validation).filter(
+        Validation.validation_id == None).all()
+    return [(TASK_VALIDATION, (u.url_id, u.url)) for u in urls]
 
 
 def get_screenshot_tasks(session_factory):
@@ -72,15 +82,35 @@ def get_screenshot_diff_tasks(session_factory):
 
 def get_tasks(session_factory):
     tasks = []
+    tasks = get_validation_tasks(session_factory)
+    if tasks:
+        return tasks
+
     tasks = get_screenshot_tasks(session_factory)
     if tasks:
         # Do screenshot tasks first since we need the screenshot to make the
         # diff
         return tasks
+
     tasks = get_screenshot_diff_tasks(session_factory)
     if tasks:
         return tasks
     return None
+
+
+async def validation(session_factory, url_id, url):
+    try:
+        res = requests.get(url)
+    except requests.RequestException:
+        return
+    errors = await validate(res.text)
+    dbsession = session_factory()
+    validation = Validation()
+    validation.valid = not bool(errors['messages'])
+    validation.errors = errors
+    validation.url_id = url_id
+    dbsession.add(validation)
+    dbsession.commit()
 
 
 async def screenshot(session_factory, url_id, url):
@@ -120,6 +150,8 @@ async def consume(queue, session_factory):
             await screenshot(session_factory, *data)
         elif task_type == TASK_SCREENSHOT_DIFF:
             await screenshot_diff(session_factory, *data)
+        elif task_type == TASK_VALIDATION:
+            await validation(session_factory, *data)
         else:
             raise NotImplementedError()
 
