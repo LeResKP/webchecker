@@ -42,4 +42,15 @@ export class ScreenshotHomeComponent implements OnDestroy, OnInit {
     this.routeSub.unsubscribe();
   }
 
+  getIcons(url) {
+    if (url.status.status === STATUS.GOOD) {
+      return ['check'];
+    }
+
+    if (url.status.status === STATUS.BAD) {
+      return ['times'];
+    }
+    return [];
+  }
+
 }

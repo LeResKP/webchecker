@@ -36,6 +36,7 @@ export class UrlsComponent implements OnDestroy, OnInit {
   }
 
   @Input() filter: Function = ((u) => true);
+  @Input() icons: Function = ((u) => []);
 
   keyupSub:  Subscription;
   filterModel = null;
