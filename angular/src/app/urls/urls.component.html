@@ -8,8 +8,7 @@
   <div class="list-group list-group-url">
     <a href="#" class="list-group-item list-group-item-action" [routerLink]="['urls', url.url_id]" routerLinkActive="active" *ngFor="let url of filteredUrls">
       {{ url.url }}
-      <i class="fa fa-check" *ngIf="url.status.status === STATUS.GOOD"></i>
-      <i class="fa fa-times" *ngIf="url.status.status === STATUS.BAD"></i>
+      <i [ngClass]="['fa', 'fa-' + icon]" *ngFor="let icon of icons(url)"></i>
     </a>
   </div>
 </ng-template>
