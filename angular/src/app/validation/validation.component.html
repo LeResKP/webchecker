@@ -1,7 +1,20 @@
-<h5 class="text-center">w3c validation</h5>
-<div class="validation">
-  <ul *ngIf="valid === false">
-    <li *ngFor="let error of validationMessages">{{error.type}} (line {{error.lastLine}}): {{error.message}}<br> <code>{{error.extract}}</code></li>
-  </ul>
-  <span *ngIf="valid === true">No errors</span>
-</div>
+<ng-template [ngIf]="w3c">
+  <h5 class="text-center">w3c validation</h5>
+  <div class="validation">
+    <ul *ngIf="w3c.valid === false">
+      <li *ngFor="let error of w3c.messages">{{error.type}} (line {{error.lastLine}}): {{error.message}}<br> <code>{{error.extract}}</code></li>
+    </ul>
+    <span *ngIf="w3c.valid === true">No errors</span>
+  </div>
+</ng-template>
+
+<br>
+<br>
+<br>
+
+<ng-template [ngIf]="linkchecker">
+  <h5 class="text-center">Linkchecker validation</h5>
+  <div class="validation">
+    <app-resource [resource]="linkchecker.result"></app-resource>
+  </div>
+</ng-template>

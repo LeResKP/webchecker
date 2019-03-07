@@ -10,6 +10,7 @@ from pyramid.paster import (
     )
 from pyramid.scripts.common import parse_vars
 from webchecker.models import (
+    LinkChecker,
     Screenshot,
     ScreenshotDiff,
     Url,
@@ -17,6 +18,7 @@ from webchecker.models import (
     get_engine,
     get_session_factory,
     )
+from webchecker.tools.linkchecker import check_url
 from webchecker.tools.validation import validate
 from webchecker.tools.screenshot import do_screenshot
 from webchecker.tools.screenshot_diff import compare_blobs
@@ -25,6 +27,14 @@ from webchecker.tools.screenshot_diff import compare_blobs
 TASK_SCREENSHOT = 'screenshot'
 TASK_SCREENSHOT_DIFF = 'screenshot_diff'
 TASK_VALIDATION = 'validation'
+TASK_LINKCHECKER = 'linkchecker'
+
+
+def get_linkchecker_tasks(session_factory):
+    dbsession = session_factory()
+    urls = dbsession.query(Url).outerjoin(LinkChecker).filter(
+        LinkChecker.linkchecker_id == None).all()
+    return [(TASK_LINKCHECKER, (u.url_id, u.url)) for u in urls]
 
 
 def get_validation_tasks(session_factory):
@@ -82,6 +92,11 @@ def get_screenshot_diff_tasks(session_factory):
 
 def get_tasks(session_factory):
     tasks = []
+
+    tasks = get_linkchecker_tasks(session_factory)
+    if tasks:
+        return tasks
+
     tasks = get_validation_tasks(session_factory)
     if tasks:
         return tasks
@@ -110,6 +125,17 @@ async def validation(session_factory, url_id, url):
     validation.errors = errors
     validation.url_id = url_id
     dbsession.add(validation)
+    dbsession.commit()
+
+
+async def do_linkchecker(session_factory, url_id, url):
+    dbsession = session_factory()
+    page = await check_url(url)
+    linkchecker = LinkChecker()
+    linkchecker.url_id = url_id
+    linkchecker.result = page.to_json()
+    linkchecker.valid = page.is_valid()
+    dbsession.add(linkchecker)
     dbsession.commit()
 
 
@@ -152,6 +178,8 @@ async def consume(queue, session_factory):
             await screenshot_diff(session_factory, *data)
         elif task_type == TASK_VALIDATION:
             await validation(session_factory, *data)
+        elif task_type == TASK_LINKCHECKER:
+            await do_linkchecker(session_factory, *data)
         else:
             raise NotImplementedError()
 

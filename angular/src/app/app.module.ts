@@ -11,7 +11,7 @@ import { ProjectGuard } from './project.guard';
 import { ProjectLoadedGuard } from './project-loaded.guard';
 import { DiffComponent } from './diff/diff.component';
 import { ScreenshotComponent } from './screenshot/screenshot.component';
-import { ValidationComponent } from './validation/validation.component';
+import { ResourceComponent, ValidationComponent } from './validation/validation.component';
 import { DiffHomeComponent } from './diff/diff-home/diff-home.component';
 import { AppHomeComponent } from './app-home/app-home.component';
 import { ActionComponent } from './action/action.component';
@@ -103,6 +103,7 @@ const routes: Routes = [
     ActionComponent,
     UrlsComponent,
     ValidationHomeComponent,
+    ResourceComponent,
     ScreenshotHomeComponent
   ],
   imports: [

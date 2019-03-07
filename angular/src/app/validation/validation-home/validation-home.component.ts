@@ -38,14 +38,20 @@ export class ValidationHomeComponent implements OnDestroy, OnInit {
   filterFunctionBound = (x) => this.filterFunction(x);
 
   getIcons(url) {
-    if (url.valid === true) {
-      return ['check'];
+    const icons = [];
+    if (url.w3c_valid === true) {
+      icons.push('check');
+    } else {
+      icons.push('times');
     }
 
-    if (url.valid === false) {
-      return ['times'];
+    if (url.linkchecker_valid === true) {
+      icons.push('check');
+    } else {
+      icons.push('times');
     }
-    return [];
+
+    return icons;
   }
 
 }

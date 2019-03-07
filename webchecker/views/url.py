@@ -100,7 +100,9 @@ def get_valdiation_urls(request):
         lis.append({
             'url_id': url.url_id,
             'url': url.url,
-            'valid': url.validation.valid,
+            'w3c_valid': url.validation.valid,
+            'linkchecker_valid': url.linkchecker.valid,
+            'valid': url.validation.valid and url.linkchecker.valid,
         })
     return lis
 

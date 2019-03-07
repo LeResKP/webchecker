@@ -30,6 +30,7 @@ class Url(Base):
     screenshots = relationship("Screenshot", uselist=True)
     statuses = relationship("UrlStatus", uselist=True, back_populates="url")
     validation = relationship("Validation", uselist=False)
+    linkchecker = relationship("LinkChecker", uselist=False)
 
     def __json__(self, request):
         dic = {
@@ -126,3 +127,12 @@ class UrlStatus(Base):
     device = Column(Text, nullable=False)
     status = Column(Text, nullable=False)
     url = relationship("Url", back_populates="statuses")
+
+
+class LinkChecker(Base):
+    __tablename__ = 'linkchecker'
+    linkchecker_id = Column(Integer, primary_key=True)
+    url_id = Column(Integer, ForeignKey("url.url_id"), nullable=False)
+    result = Column(JSON, nullable=False)
+    valid = Column(Boolean, nullable=False)
+    url = relationship("Url")

@@ -2,8 +2,10 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 
 
 INDEX_HTML = b'''
+<!DOCTYPE html>
 <html>
 <head>
+  <title>Home</title>
   <link href="/style.css" rel="stylesheet" type="text/css" />
   <link href="/redirect301.css" rel="stylesheet" type="text/css" />
   <link href="/redirect301to404.css" rel="stylesheet" type="text/css" />

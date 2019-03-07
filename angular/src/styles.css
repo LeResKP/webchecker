@@ -43,3 +43,26 @@ img.screenshot {
 .diff-layer {
   position: absolute;
 }
+
+
+li app-resource:not(:last-child) {
+  display: block;
+  border-bottom: 1px solid #e4e4e4;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.resource-status-0 > .resource-url,
+.resource-status-0 > .resource-status {
+  background-color: #7de07d;
+}
+
+.resource-status-1 > .resource-url,
+.resource-status-1 > .resource-status {
+  background-color: #ffd68a;
+}
+
+.resource-status-2 > .resource-url,
+.resource-status-2 > .resource-status {
+  background-color: #ff9898;
+}

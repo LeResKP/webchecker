@@ -3,7 +3,7 @@ import json
 
 
 async def execute(js_script, *args):
-    cmd = ['node', 'js/screenshot.js']
+    cmd = ['node', js_script]
     cmd += args
 
     print('CMD', cmd)
