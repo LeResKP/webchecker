@@ -1,1 +1,22 @@
-<router-outlet></router-outlet>
+  <div class="row">
+    <div class="col-md-3">
+      <app-urls [urls]="urls" [filter]="filterFunctionBound" [icons]="getIcons" #appUrls>
+        <div class="text-center">
+          <div class="btn-group btn-group-sm btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="filterModel" (ngModelChange)="appUrls.setUrls()">
+            <label ngbButtonLabel class="btn-primary">
+              <input ngbButton type="radio" [value]="null"> All
+            </label>
+            <label ngbButtonLabel class="btn-primary">
+              <input ngbButton type="radio" [value]="true"> With diff
+            </label>
+            <label ngbButtonLabel class="btn-primary">
+              <input ngbButton type="radio" [value]="false"> Without diff
+            </label>
+          </div>
+        </div>
+      </app-urls>
+    </div>
+    <div class="col-md-9">
+      <router-outlet></router-outlet>
+    </div>
+  </div>

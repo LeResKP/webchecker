@@ -81,7 +81,7 @@ def get_diff_urls(request):
         res.append({
             'url': (d.a_url or d.b_url).url,
             'url_id': d.screenshot_diff_id,
-            'status': {},
+            'has_diff': bool(d.diff),
         })
     return res
 
