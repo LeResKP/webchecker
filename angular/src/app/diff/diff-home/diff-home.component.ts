@@ -9,11 +9,11 @@ import { UrlService } from '../../url.service';
 
 @Component({
   selector: 'app-diff-home',
-  templateUrl: '../../action-home.component.html',
+  templateUrl: './diff-home.component.html',
   styles: []
 })
 export class DiffHomeComponent implements OnDestroy, OnInit {
-
+  filterModel = null;
   routeSub: Subscription;
   urls = <any>[];
 
@@ -36,6 +36,22 @@ export class DiffHomeComponent implements OnDestroy, OnInit {
   ngOnDestroy() {
     this.projectService.diffVersion = null;
     this.routeSub.unsubscribe();
+  }
+
+  filterFunction(url) {
+    return this.filterModel !== null ? url.has_diff === this.filterModel : true;
+  }
+
+  filterFunctionBound = (x) => this.filterFunction(x);
+
+  getIcons(url) {
+    const icons = [];
+    if (url.has_diff === true) {
+      icons.push('times');
+    } else {
+      icons.push('check');
+    }
+    return icons;
   }
 
 }
