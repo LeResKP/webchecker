@@ -1,14 +1,10 @@
-from pyramid.response import Response
-from pyramid.view import view_config, view_defaults
+from pyramid.view import view_config
 
 from ..models import Project
+from . import BaseView
 
 
-@view_defaults(renderer='json')
-class ProjectView(object):
-
-    def __init__(self, request):
-        self.request = request
+class ProjectView(BaseView):
 
     @view_config(route_name='projects', request_method='GET')
     def get(self):
