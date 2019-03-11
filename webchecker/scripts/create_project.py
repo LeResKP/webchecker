@@ -54,7 +54,8 @@ def main(argv=sys.argv):
     with transaction.manager:
         dbsession = get_tm_session(session_factory, transaction.manager)
 
-        project1 = Project(name='localhost2')
+        # project1 = Project(name='localhost1')
+        project1 = dbsession.query(Project).filter_by(name='localhost1').one()
         version = ProjectVersion()
         version.version = project1.get_next_version()
         version.project = project1
