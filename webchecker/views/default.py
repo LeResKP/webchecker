@@ -6,7 +6,7 @@ import base64
 import requests
 import transaction
 
-from ..models import LinkChecker, Url, Screenshot, UrlStatus, Validation
+from ..models import LinkChecker, Url, Screenshot, UrlStatus
 
 
 @view_config(route_name='screenshots', request_method='GET')
@@ -72,32 +72,11 @@ def do_screenshot(request):
         url_id=request.matchdict['id']).one()
 
 
-@view_config(route_name='validation', request_method='GET', renderer='json')
-def do_validation(request):
-    val = request.dbsession.query(Validation).filter_by(
-        url_id=request.matchdict['id']).one_or_none()
-    if not val:
-        raise exc.HTTPNotFound()
-
-    linkchecker = request.dbsession.query(LinkChecker).filter_by(
-        url_id=request.matchdict['id']).one_or_none()
-
-    return {
-        'w3c': {
-            'valid': val.valid,
-            'messages': val.errors['messages'],
-        },
-        'linkchecker': {
-            'result': linkchecker.result,
-            'valid': linkchecker.valid,
-        }
-    }
 
 
 # Need for cors
 @view_config(route_name='update_status', request_method='OPTIONS', renderer='json')
 @view_config(route_name='create_status', request_method='OPTIONS', renderer='json')
 @view_config(route_name='screenshot', request_method='OPTIONS', renderer='json')
-@view_config(route_name='validation', request_method='OPTIONS', renderer='json')
 def options(request):
     return {}

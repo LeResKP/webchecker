@@ -21,7 +21,7 @@ export class ValidationHomeComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
       this.routeSub = this.projectService.currentVersion$.subscribe(() => {
-        this.urlService.getValidationUrls(this.projectService.currentVersion.id).subscribe((urls) => {
+        this.urlService.getValidations(this.projectService.currentVersion.id).subscribe((urls) => {
           this.urls = urls;
         });
       });
