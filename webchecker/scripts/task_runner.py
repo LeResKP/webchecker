@@ -226,8 +226,9 @@ def main(argv=sys.argv):
     except KeyboardInterrupt:
         pass
     finally:
-        print("Closing Loop")
-        loop.close()
+        # When doing the keyboard interrupt the loop is already closed
+        # loop.close()
+        pass
 
 
 if __name__ == '__main__':
