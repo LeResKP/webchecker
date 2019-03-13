@@ -9,7 +9,7 @@
     <ng-template ngbTabContent>
       <div class="screenshots">
         <ng-template [ngIf]="url.screenshots[device.id]" [ngIfElse]="noScreenshot">
-          <img [src]="api_url + '/screenshots/' + url.screenshots[device.id]" class="screenshot">
+          <img [src]="api_url + '/screenshots/' + url.screenshots[device.id] + '.png'" class="screenshot">
         </ng-template>
         <ng-template #noScreenshot>
           No screenshot available

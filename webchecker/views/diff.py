@@ -9,7 +9,7 @@ from . import BaseView
 
 class DiffView(BaseView):
 
-    @view_config(route_name='diffs', request_method='GET', renderer='json')
+    @view_config(route_name='screenshot_diffs', request_method='GET', renderer='json')
     def get_all(self):
         a_version_id = self.request.matchdict['a_version_id']
         b_version_id = self.request.matchdict['b_version_id']
@@ -26,21 +26,13 @@ class DiffView(BaseView):
         for d in diffs:
             res.append({
                 'url': (d.a_url or d.b_url).url,
-                'url_id': d.screenshot_diff_id,
+                'id': d.screenshot_diff_id,
                 'has_diff': bool(d.diff),
             })
         return res
 
-    @view_config(route_name='diff_image', request_method='GET')
-    def get(self):
-        s_d = self.request.dbsession.query(ScreenshotDiff).get(
-           self. request.matchdict['id'])
-        if not s_d:
-            raise exc.HTTPNotFound()
-        return Response(s_d.diff, content_type='image/png', status=200)
-
     @view_config(route_name='screenshot_diff', request_method='GET', renderer='json')
-    def screenshot_diff(self):
+    def get(self):
         diff = self.request.dbsession.query(ScreenshotDiff).get(
             self.request.matchdict['screenshot_diff_id'])
 
@@ -55,17 +47,23 @@ class DiffView(BaseView):
 
         if diff.diff:
             return {
-                'a_url_id': a_url.get_desktop_screenshot().screenshot_id,
-                'b_url_id': b_url.get_desktop_screenshot().screenshot_id,
-                # TODO: we should be able to remove it since we already have it
-                # in the component.
-                'screenshot_diff_id': diff.screenshot_diff_id,
+                'a_screenshot_id': a_url.get_desktop_screenshot().screenshot_id,
+                'b_screenshot_id': b_url.get_desktop_screenshot().screenshot_id,
             }
         return {}
 
 
+    @view_config(route_name='screenshot_diff_image', request_method='GET')
+    def get_image(self):
+        s_d = self.request.dbsession.query(ScreenshotDiff).get(
+           self. request.matchdict['id'])
+        if not s_d:
+            raise exc.HTTPNotFound()
+        return Response(s_d.diff, content_type='image/png', status=200)
+
+
 def includeme(config):
-    config.add_route('diffs', '/api/v/:a_version_id/d/:b_version_id/diffs')
-    config.add_route('diff_image', '/api/diff/:id.png')
+    config.add_route('screenshot_diffs', '/api/v/:a_version_id/d/:b_version_id/diffs')
     config.add_route('screenshot_diff',
                      '/api/v/:a_version_id/diffs/:screenshot_diff_id')
+    config.add_route('screenshot_diff_image', '/api/diff/:id.png')

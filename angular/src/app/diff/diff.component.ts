@@ -18,6 +18,7 @@ export class DiffComponent implements OnDestroy, OnInit {
   public showLayer = true;
   public api_url = API_URL;
   private routeSub: Subscription;
+  public screenshotDiffId: number;
 
   constructor(private route: ActivatedRoute, private projectService: ProjectService, private urlService: UrlService) { }
 
@@ -26,9 +27,10 @@ export class DiffComponent implements OnDestroy, OnInit {
     this.routeSub = combineLatest(
       this.route.paramMap,
       this.projectService.currentVersion$,
-      (params: Params, version: any) => ({'screenshot_id': +params.params['id'], 'a_version_id': version.id})
+      (params: Params, version: any) => ({'screenshot_diff_id': +params.params['id'], 'a_version_id': version.id})
     ).subscribe((data) => {
-      this.urlService.getDiff(data['screenshot_id'], data['a_version_id']).subscribe((res) => {
+      this.screenshotDiffId = data['screenshot_diff_id'];
+      this.urlService.getDiff(data['screenshot_diff_id'], data['a_version_id']).subscribe((res) => {
         this.diff = res;
       });
     });

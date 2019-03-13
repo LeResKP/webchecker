@@ -1,15 +1,15 @@
 <h5>Diff</h5>
 
-<ng-template [ngIf]="diff && diff.a_url_id" [ngIfElse]="noDiff">
+<ng-template [ngIf]="diff && diff.a_screenshot_id" [ngIfElse]="noDiff">
   <a (click)="showLayer = !showLayer">Show layer</a>
   <div class="row diff-part">
     <div class="col-6">
-      <img [src]="api_url + '/screenshots/' + diff.a_url_id + '.png'" class="diff-screenshot">
-      <img [src]="api_url + '/diff/' + diff.screenshot_diff_id + '.png'" class="diff-layer" *ngIf="showLayer">
+      <img [src]="api_url + '/screenshots/' + diff.a_screenshot_id + '.png'" class="diff-screenshot">
+      <img [src]="api_url + '/diff/' + screenshotDiffId + '.png'" class="diff-layer" *ngIf="showLayer">
     </div>
     <div class="col-6">
-      <img [src]="api_url + '/screenshots/' + diff.b_url_id + '.png'" class="diff-screenshot">
-      <img [src]="api_url + '/diff/' + diff.screenshot_diff_id + '.png'" class="diff-layer" *ngIf="showLayer">
+      <img [src]="api_url + '/screenshots/' + diff.b_screenshot_id + '.png'" class="diff-screenshot">
+      <img [src]="api_url + '/diff/' + screenshotDiffId + '.png'" class="diff-layer" *ngIf="showLayer">
     </div>
   </div>
 </ng-template>

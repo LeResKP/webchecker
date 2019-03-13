@@ -7,7 +7,7 @@ from . import BaseView
 class ProjectView(BaseView):
 
     @view_config(route_name='projects', request_method='GET')
-    def get(self):
+    def get_all(self):
         return self.request.dbsession.query(Project).all()
 
 

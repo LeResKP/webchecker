@@ -34,7 +34,7 @@ class Url(Base):
 
     def __json__(self, request):
         dic = {
-            'url_id': self.url_id,
+            'id': self.url_id,
             'url': self.url,
         }
         screenshots = {}

@@ -26,7 +26,7 @@ export class UrlService {
   }
 
   createStatus(url, device, status) {
-    return this.http.post(`${API_URL}/urls/${url.url_id}/status`, {status, device: device.id}).pipe(
+    return this.http.post(`${API_URL}/urls/${url.id}/status`, {status, device: device.id}).pipe(
       tap((res) => {
         url['status'] = res['status'];
       })

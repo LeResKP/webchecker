@@ -6,7 +6,7 @@
 
 <ng-template [ngIf]="urls">
   <div class="list-group list-group-url">
-    <a href="#" class="list-group-item list-group-item-action" [routerLink]="['urls', url.url_id]" routerLinkActive="active" *ngFor="let url of filteredUrls">
+    <a href="#" class="list-group-item list-group-item-action" [routerLink]="[url.id]" routerLinkActive="active" *ngFor="let url of filteredUrls">
       {{ url.url }}
       <i [ngClass]="['fa', 'fa-' + icon]" *ngFor="let icon of icons(url)"></i>
     </a>

@@ -47,7 +47,7 @@ const routes: Routes = [
             component: ValidationHomeComponent,
             children: [
               {
-                path: 'urls/:id',
+                path: ':id',
                 component: ValidationComponent,
               },
             ],
@@ -64,7 +64,7 @@ const routes: Routes = [
             component: ScreenshotHomeComponent,
             children: [
               {
-                path: 'urls/:id',
+                path: ':id',
                 component: ScreenshotComponent,
               },
             ],
@@ -81,7 +81,7 @@ const routes: Routes = [
             component: DiffHomeComponent,
             children: [
               {
-                path: 'urls/:id',
+                path: ':id',
                 component: DiffComponent,
               }
             ]

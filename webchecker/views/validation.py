@@ -19,7 +19,7 @@ class ValidationView(BaseView):
         lis = []
         for url in p_v.urls:
             lis.append({
-                'url_id': url.url_id,
+                'id': url.url_id,
                 'url': url.url,
                 'w3c_valid': url.validation.valid,
                 'linkchecker_valid': url.linkchecker.valid,
@@ -30,12 +30,12 @@ class ValidationView(BaseView):
     @view_config(route_name='validation', request_method='GET')
     def get(self):
         val = self.request.dbsession.query(Validation).filter_by(
-            url_id=self.request.matchdict['id']).one_or_none()
+            url_id=self.request.matchdict['url_id']).one_or_none()
         if not val:
             raise exc.HTTPNotFound()
 
         linkchecker = self.request.dbsession.query(LinkChecker).filter_by(
-            url_id=self.request.matchdict['id']).one_or_none()
+            url_id=self.request.matchdict['url_id']).one_or_none()
 
         return {
             'w3c': {
@@ -51,4 +51,4 @@ class ValidationView(BaseView):
 
 def includeme(config):
     config.add_route('validations', '/api/v/:version_id/validations')
-    config.add_route('validation', '/api/validations/:id')
+    config.add_route('validation', '/api/validations/:url_id')

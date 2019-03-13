@@ -13,7 +13,7 @@ class ScreenshotView(BaseView):
     @view_config(route_name='screenshot', request_method='GET')
     def get(self):
         screenshot = self.request.dbsession.query(Screenshot).filter_by(
-            screenshot_id=self.request.matchdict['id']).one_or_none()
+            screenshot_id=self.request.matchdict['screenshot_id']).one_or_none()
         if not screenshot:
             raise exc.HTTPNotFound()
         return Response(screenshot.screenshot, content_type='image/png', status=200)
@@ -22,7 +22,7 @@ class ScreenshotView(BaseView):
 @view_config(route_name='update_status', request_method='PUT', renderer='json')
 def update_status(request):
     status = request.dbsession.query(UrlStatus).filter_by(
-        url_status_id=request.matchdict['id']).one_or_none()
+        url_status_id=request.matchdict['url_status_id']).one_or_none()
     if not status:
         raise exc.HTTPNotFound()
     status.status = request.json_body['status']
@@ -32,7 +32,7 @@ def update_status(request):
 @view_config(route_name='create_status', request_method='POST', renderer='json')
 def create_status(request):
     url = request.dbsession.query(Url).filter_by(
-        url_id=request.matchdict['id']).one_or_none()
+        url_id=request.matchdict['url_id']).one_or_none()
     if not url:
         raise exc.HTTPNotFound()
     for status in url.statuses:
@@ -51,6 +51,6 @@ def options(request):
 
 
 def includeme(config):
-    config.add_route('screenshot', '/api/screenshots/:id.png')
-    config.add_route('create_status', '/api/urls/:id/status')
-    config.add_route('update_status', '/api/status/:id')
+    config.add_route('screenshot', '/api/screenshots/:screenshot_id.png')
+    config.add_route('create_status', '/api/urls/:url_id/status')
+    config.add_route('update_status', '/api/status/:url_status_id')
