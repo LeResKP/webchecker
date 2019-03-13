@@ -21,10 +21,6 @@ export class UrlService {
     return this.http.get<Array<any>>(`${API_URL}/v/${versionId}/urls`);
   }
 
-  getDiffUrls(aVersionId, bVersionId): Observable<Array<any>> {
-    return this.http.get<Array<any>>(`${API_URL}/v/${aVersionId}/d/${bVersionId}/urls`);
-  }
-
   getUrl(urlId) {
     return this.http.get<Array<any>>(`${API_URL}/urls/${urlId}`);
   }
@@ -65,7 +61,12 @@ export class UrlService {
     return this.http.get(`${API_URL}/validations/${urlId}`);
   }
 
+
+  getDiffs(aVersionId, bVersionId): Observable<Array<any>> {
+    return this.http.get<Array<any>>(`${API_URL}/v/${aVersionId}/d/${bVersionId}/diffs`);
+  }
+
   getDiff(screenshotId, aVersionId) {
-    return this.http.get(`${API_URL}/diff/${aVersionId}/screenshots/${screenshotId}`);
+    return this.http.get(`${API_URL}/v/${aVersionId}/diffs/${screenshotId}`);
   }
 }

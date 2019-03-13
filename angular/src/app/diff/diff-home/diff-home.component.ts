@@ -27,7 +27,7 @@ export class DiffHomeComponent implements OnDestroy, OnInit {
       this.projectService.currentVersion$,
       (params: Params, version: any) => ({'b_version_id': +params.params['b_id'], 'a_version_id': version.id})
     ).subscribe((data) => {
-      this.urlService.getDiffUrls(data.a_version_id, data.b_version_id).subscribe((urls) => {
+      this.urlService.getDiffs(data.a_version_id, data.b_version_id).subscribe((urls) => {
         this.urls = urls;
       });
     });
