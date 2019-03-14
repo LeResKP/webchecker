@@ -1,0 +1,8 @@
+<div *ngIf="project$ | async as project">
+  <h4>Versions of {{project.name}}:</h4>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let version of project.versions">
+      <a [routerLink]="['v', version.id]">{{ version.version }}</a>
+    </li>
+  </ul>
+</div>

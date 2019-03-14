@@ -18,14 +18,23 @@ import { ActionComponent } from './action/action.component';
 import { UrlsComponent } from './urls/urls.component';
 import { ValidationHomeComponent } from './validation/validation-home/validation-home.component';
 import { ScreenshotHomeComponent } from './screenshot/screenshot-home/screenshot-home.component';
+import { ProjectsComponent } from './projects/projects.component';
+import { VersionsComponent } from './versions/versions.component';
 
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '',
+    redirectTo: 'p',
     pathMatch: 'full',
-    canActivate: [ProjectGuard],
+  },
+  {
+    path: 'p',
+    component: ProjectsComponent,
+  },
+  {
+    path: 'p/:projectId',
+    component: VersionsComponent,
   },
   {
     path: 'p/:projectId/v/:versionId',
@@ -104,7 +113,9 @@ const routes: Routes = [
     UrlsComponent,
     ValidationHomeComponent,
     ResourceComponent,
-    ScreenshotHomeComponent
+    ScreenshotHomeComponent,
+    ProjectsComponent,
+    VersionsComponent
   ],
   imports: [
     BrowserModule,
